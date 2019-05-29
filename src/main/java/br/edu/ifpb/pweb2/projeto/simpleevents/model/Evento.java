@@ -40,10 +40,10 @@ public class Evento {
 	@ManyToOne
 	private Usuario dono;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "evento", cascade = CascadeType.ALL)
 	private List<Vaga> vagas = new ArrayList<>();
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy="evento", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy="evento", cascade = CascadeType.ALL)
 	private List<Avaliacao> avaliacao = new ArrayList<>();
 	
 	public Long getId() {
