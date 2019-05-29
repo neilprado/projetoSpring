@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("/events")
-public class EventController {
+public class EventoController {
 
   @RequestMapping(method = RequestMethod.GET)
   public String home() {
