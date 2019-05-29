@@ -5,11 +5,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/events")
-public class EventController {
+@RequestMapping("/especialidades")
+public class EspecialidadeController {
 
   @RequestMapping(method = RequestMethod.GET)
   public String home() {
-    return "events";
+    return "especialidades-form";
   }
 }
