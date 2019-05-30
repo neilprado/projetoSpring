@@ -17,10 +17,16 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name="TB_EVENTO")
+@Getter
+@Setter
+@ToString
 public class Evento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,48 +51,5 @@ public class Evento {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="evento", cascade = CascadeType.ALL)
 	private List<Avaliacao> avaliacao = new ArrayList<>();
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getDescricao() {
-		return descricao;
-	}
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
-	public Date getData() {
-		return data;
-	}
-	public void setData(Date data) {
-		this.data = data;
-	}
-	public String getLocal() {
-		return local;
-	}
-	public void setLocal(String local) {
-		this.local = local;
-	}
-	public boolean isFinalizado() {
-		return isFinalizado;
-	}
-	public void setFinalizado(boolean isFinalizado) {
-		this.isFinalizado = isFinalizado;
-	}
-	public Usuario getDono() {
-		return dono;
-	}
-	public void setDono(Usuario dono) {
-		this.dono = dono;
-	}
-	@Override
-	public String toString() {
-		return "Evento [id=" + id + ", descricao=" + descricao + ", data=" + data + ", local=" + local
-				+ ", isFinalizado=" + isFinalizado + ", dono=" + dono + "]";
-	}
-	
-	
+
 }
