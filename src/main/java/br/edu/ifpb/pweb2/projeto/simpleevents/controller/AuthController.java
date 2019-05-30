@@ -54,6 +54,14 @@ public class AuthController {
 
   @GetMapping("/index")
   public String index() {return "index";}
+  
+  @DeleteMapping("/user/{id}")
+  public String delete(@PathVariable Long id) {
+	 userRepository.deleteById(id);
+	 return "redirect:index";
+  }
+  
+  
 
 
 }

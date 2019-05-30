@@ -35,18 +35,15 @@ public class Usuario implements Serializable {
 	private String nome;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@Past(message="Data inválida, não é possível cadastrar-se em um evento que já passou")
 	private Date dataNascimento;
 	
 	@Pattern(regexp = "^\\([1-9]{2}\\) (?:[2-8]|9[1-9])[0-9]{3}\\-[0-9]{4}$", message = "Informe um telefone [(83) 99999-8888]")
 	private String telefone;
 
+	//@Size(min=8, message="A senha deve ter no mínimo oito caracteres")
 	private String password;
 	private String email;
 	
-	@Size(min=8, message="A senha deve ter no mínimo oito caracteres")
-	private String senha;
-
 	@OneToMany(mappedBy="dono", cascade = CascadeType.ALL)
 	private List<Evento> eventos;
 	
