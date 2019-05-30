@@ -6,4 +6,5 @@ import br.edu.ifpb.pweb2.projeto.simpleevents.model.Usuario;
 
 public interface UsuarioDAO extends JpaRepository<Usuario, Long> {
 
+    Usuario findByEmail(String email);
 }
