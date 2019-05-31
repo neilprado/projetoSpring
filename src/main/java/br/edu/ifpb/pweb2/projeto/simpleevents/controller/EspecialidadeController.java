@@ -26,7 +26,7 @@ public class EspecialidadeController {
 
   @GetMapping("/list")
   public ModelAndView home() {
-    ModelAndView mav = new ModelAndView("especialidades-list");
+    ModelAndView mav = new ModelAndView("especialidades/especialidades-list");
     List<Especialidade> especialidades = dao.findAll();
     mav.addObject("especialidades", especialidades);
     return mav;
