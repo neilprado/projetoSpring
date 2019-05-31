@@ -39,7 +39,8 @@ public class Evento {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Future(message="O evento deverá ocorrer em uma data futura")
 	private Date data;
-	
+	@NotNull(message="Campo data é obrigatório")
+	private String nome;
 	private String local;
 	private boolean isFinalizado;
 	

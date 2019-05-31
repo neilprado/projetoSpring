@@ -5,17 +5,15 @@ import br.edu.ifpb.pweb2.projeto.simpleevents.model.Evento;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/events")
 public class EventoController {
+    @Autowired
 	private EventoDAO dao;
 
   @RequestMapping()
@@ -29,7 +27,7 @@ public class EventoController {
       return "addEvent";
   }
   
-  @RequestMapping(method = RequestMethod.POST)
+  @PostMapping
   public String save(Evento evento) {
 	  /* 
 	   * Precisa saber como pegar o usuário corrente

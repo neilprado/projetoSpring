@@ -16,19 +16,23 @@
         <div id="login-row" class="row justify-content-center align-items-center">
             <div id="login-column" class="col-md-6">
                 <div id="login-box" class="col-md-12">
-                    <form id="login-form" class="form" action="" th:object="${evento}" method="post">
+                    <form id="login-form" class="form" action="/events" th:object="${evento}" method="post">
                         <h3 class="text-center text-info">Adicionar Evento</h3>
+                        <div class="form-group row">
+                            <label for="nome" class="text-info">Nome:</label><br>
+                            <input type="text" name="nome" id="nome" th:field="*{nome}" required class="form-control">
+                        </div>
                         <div class="form-group row">
                             <label for="local" class="text-info">Local:</label><br>
                             <input type="text" name="local" id="local" th:field="*{local}" required class="form-control">
                         </div>
                         <div class="form-group row">
                             <label for="data" class="text-info">Data:</label><br>
-                            <input type="date" name="data" id="data" th:field="*{data}" class="form-control" required>
+                            <input type="datetime-local" name="data" id="data" th:field="*{data}" class="form-control" required>
                         </div>
                         <div class="form-group row">
                             <label for="descricao" class="text-info">Descrição:</label><br>
-                            <input type="text" name="descricao" id="descricao" th:field="*{descricao}" class="form-control" required>
+                            <textarea type="text" name="descricao" id="descricao" th:field="*{descricao}" class="form-control" required></textarea>
                         </div>
                         <div class="form-group row justify-content-between align-items-center">
                             <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
