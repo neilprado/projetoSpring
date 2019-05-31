@@ -2,9 +2,14 @@ package br.edu.ifpb.pweb2.projeto.simpleevents.controller;
 
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.model.Evento;
+
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -38,5 +43,18 @@ public class EventoController {
   public String delete(Long id) {
 	  dao.deleteById(id);
 	  return "redirect:events";
+	  //Mensagem de sucesso
+  }
+  
+  public String update(@RequestBody Evento evento, @PathVariable Long id) {
+	  Optional<Evento> event = dao.findById(id);
+	  if(!event.isPresent()) {
+		  return "redirect:events";
+		  //Mensagem de erro
+	  }
+	  evento.setId(id);
+	  dao.save(evento);
+	  return "redirect:events";
+	  //Mensagem de sucesso
   }
 }
