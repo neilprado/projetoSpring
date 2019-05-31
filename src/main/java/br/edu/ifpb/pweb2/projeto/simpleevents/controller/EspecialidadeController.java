@@ -40,7 +40,7 @@ public class EspecialidadeController {
   @RequestMapping(method = RequestMethod.POST)
   public String createEspecialidade(Especialidade especialidade) {
     dao.save(especialidade);
-    return "redirect:especialidades";
+    return "redirect:/especialidades/list";
   }
   
   @DeleteMapping("/especialidades/{id}")
