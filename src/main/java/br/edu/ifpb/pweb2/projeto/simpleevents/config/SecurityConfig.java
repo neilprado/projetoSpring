@@ -12,6 +12,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +24,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Bean
+    public RefererRedirectionAuthenticationSuccessHandler successHandler() {
+        return new RefererRedirectionAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(encodePWD());
@@ -31,11 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers( "/index").permitAll().and()
-                .authorizeRequests().antMatchers("/signup").access("isAnonymous()").and()
-                .authorizeRequests().antMatchers("/especialidades/**", "/events/**").access("isAuthenticated()").and()
-                .formLogin().loginPage("/login").defaultSuccessUrl("/index", true).permitAll()
-                .and().logout().permitAll();
+        http.authorizeRequests().antMatchers("/").permitAll().and()
+                .authorizeRequests().antMatchers("/signup", "/login").access("isAnonymous()").and()
+                .authorizeRequests().antMatchers("/logout", "/especialidades/**", "/events/**").access("isAuthenticated()").and()
+                .formLogin().loginPage("/login").successHandler(successHandler())
+                .and().logout();
+        http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }

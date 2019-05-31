@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,9 @@ public class AuthController {
   private BCryptPasswordEncoder passwordEncoder;
 
   @GetMapping("/login")
-  public String login() { return "login";  }
+  public String login(HttpServletRequest request) {
+    return "login";
+  }
 
   @GetMapping("/signup")
   public String signUp(Model model) {
@@ -52,7 +55,7 @@ public class AuthController {
     return "login";
   }
 
-  @GetMapping("/index")
+  @GetMapping
   public String index() {return "index";}
   
   @DeleteMapping("/user/{id}")
