@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -63,8 +64,18 @@ public class AuthController {
 	 userRepository.deleteById(id);
 	 return "redirect:index";
   }
-  
-  
 
+  @PutMapping("/user{id}")
+  public String update(@RequestBody Usuario usuario, @PathVariable Long id) {
+	  Optional<Usuario> user = userRepository.findById(id);
+	  if(!user.isPresent()) {
+		  return "redirect:index";
+		  //Inserir mensagem de erro
+	  }
+	  usuario.setUser_id(id);
+	  userRepository.save(usuario);
+	  return "redirect:index";
+	  //Mensagem de sucesso
+  }
 
 }

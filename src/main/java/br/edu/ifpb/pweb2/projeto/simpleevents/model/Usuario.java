@@ -53,7 +53,7 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy="usuario", cascade = CascadeType.ALL)
 	private List<Avaliacao> avaliacao;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 }
