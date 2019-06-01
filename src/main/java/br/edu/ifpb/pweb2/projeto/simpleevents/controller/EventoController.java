@@ -37,13 +37,14 @@ public class EventoController {
 	  return "redirect:events";
   }
   
-  @RequestMapping(method = RequestMethod.DELETE)
+  @DeleteMapping("/events/{id}")
   public String delete(Long id) {
 	  dao.deleteById(id);
 	  return "redirect:events";
 	  //Mensagem de sucesso
   }
   
+  @PutMapping("/events/{id}")
   public String update(@RequestBody Evento evento, @PathVariable Long id) {
 	  Optional<Evento> event = dao.findById(id);
 	  if(!event.isPresent()) {
