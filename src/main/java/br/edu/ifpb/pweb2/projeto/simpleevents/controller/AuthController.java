@@ -59,13 +59,13 @@ public class AuthController {
   @GetMapping
   public String index() {return "index";}
   
-  @DeleteMapping("/user/{id}")
+  @DeleteMapping("/{id}")
   public String delete(@PathVariable Long id) {
 	 userRepository.deleteById(id);
 	 return "redirect:index";
   }
 
-  @PutMapping("/user{id}")
+  @PutMapping("/{id}")
   public String update(@RequestBody Usuario usuario, @PathVariable Long id) {
 	  Optional<Usuario> user = userRepository.findById(id);
 	  if(!user.isPresent()) {

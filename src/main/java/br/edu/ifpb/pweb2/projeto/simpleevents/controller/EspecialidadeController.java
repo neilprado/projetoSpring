@@ -43,14 +43,14 @@ public class EspecialidadeController {
     return "redirect:/especialidades/list";
   }
   
-  @DeleteMapping("/especialidades/{id}")
+  @DeleteMapping("/{id}")
   public String delete(@PathVariable Long id) {
 	  dao.deleteById(id);
 	  return "redirect:especialidades";
 	  //Exibir mensagem de sucesso
   }
   
-  @PutMapping("/especialidades/{id}")
+  @PutMapping("/{id}")
   public String update(@RequestBody Especialidade especialidade, @PathVariable Long id) {
 	  Optional<Especialidade> specialist = dao.findById(id);
 	  if(!specialist.isPresent()) {
