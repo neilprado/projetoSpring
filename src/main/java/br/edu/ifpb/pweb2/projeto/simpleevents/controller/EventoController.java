@@ -1,24 +1,38 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.controller;
 
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EventoDAO;
+import br.edu.ifpb.pweb2.projeto.simpleevents.dao.UsuarioDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.model.Evento;
+import br.edu.ifpb.pweb2.projeto.simpleevents.model.Usuario;
+import br.edu.ifpb.pweb2.projeto.simpleevents.service.CustomUserDetails;
 
+import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/events")
 public class EventoController {
     @Autowired
-	private EventoDAO dao;
+    private EventoDAO dao;
+    @Autowired
+    private UsuarioDAO userDao;
 
   @RequestMapping()
-  public String home() {
-    return "events";
+  public ModelAndView listAll(Authentication auth, Principal principal) {
+    System.out.println("OLHA AQUI PORRANS!");
+    System.out.println(((CustomUserDetails) auth.getPrincipal()).getEmail());
+    ModelAndView mav = new ModelAndView("events");
+    List<Evento> eventos = dao.findAll();
+    mav.addObject("eventos", eventos);
+    return mav;
   }
 
   @GetMapping("/form")
@@ -28,11 +42,10 @@ public class EventoController {
   }
   
   @PostMapping
-  public String save(Evento evento) {
-	  /* 
-	   * Precisa saber como pegar o usuário corrente
-	   * evento.setDono(Usuario corrente da sessão);
-	   */
+  public String save(Evento evento, Principal principal, Authentication auth) {
+      String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+      Usuario currentUser = userDao.findByEmail(userEmail);
+      evento.setDono(currentUser);
 	  dao.save(evento);
 	  return "redirect:events";
   }

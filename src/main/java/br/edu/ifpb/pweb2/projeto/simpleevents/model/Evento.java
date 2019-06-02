@@ -1,8 +1,8 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -36,9 +36,9 @@ public class Evento {
 	private String descricao;
 	
 	@NotNull(message="Campo data é obrigatório")
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
 	@Future(message="O evento deverá ocorrer em uma data futura")
-	private Date data;
+	private LocalDateTime data;
 	@NotNull(message="Campo data é obrigatório")
 	private String nome;
 	private String local;

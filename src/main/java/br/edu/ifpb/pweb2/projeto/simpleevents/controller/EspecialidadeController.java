@@ -26,7 +26,7 @@ public class EspecialidadeController {
 
   @GetMapping("/list")
   public ModelAndView home() {
-    ModelAndView mav = new ModelAndView("especialidades/especialidades-list");
+    ModelAndView mav = new ModelAndView("especialidades/list");
     List<Especialidade> especialidades = dao.findAll();
     mav.addObject("especialidades", especialidades);
     return mav;
@@ -34,7 +34,7 @@ public class EspecialidadeController {
 
   @RequestMapping("/form")
   public String form() {
-    return "especialidades-form";
+    return "especialidades/form";
   }
 
   @RequestMapping(method = RequestMethod.POST)
