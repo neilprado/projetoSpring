@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Events</title>
+    <link rel="stylesheet"
+          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+<body>
+<div th:insert="~{fragments :: navbar}"></div>
+<div class="container-fluid">
+    <div class="row justify-content-end" style="width: 100%; margin: 0px;">
+            <form action="/events" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" class="form-control" name="inputSearch" id="input-search" placeholder="Search...">
+                </div>
+                <button type="submit" class="btn btn-outline-info mb-2">Search</button>
+                <a href="/events/form" class="btn btn-info mb-2 ml-3">Adicionar Evento</a>
+        </form>
+    </div>
+    <div class="row">
+        <div th:each="evento : ${eventos}" class="card m-3" style="width: 18rem;">
+                <div class="card-body">
+                    <h4 class="card-title" th:text="${evento.nome}"></h4>
+                    <h5 class="card-text" th:text="${evento.dono.nome}"></h5>
+                    <h6 class="card-text" th:text="${evento.local}"></h6>
+                    <h6 class="card-text" th:text="${#temporals.format(evento.data, 'dd-MM-yyyy hh:mm a')}"></h6>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li th:each="vaga: ${evento.vagas}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <p style="line-height: 100%; vertical-align: middle; margin-bottom: 0;" 
+                        th:text="${vaga.especialidade.nome}"></p>
+                        <span class="badge badge-info badge-pill" th:text="${vaga.quantidade}"></span>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <a th:href="@{'events/' + ${evento.id}}" class="card-link" style="color: #17a2b8;">Ver Evento</a>
+                </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

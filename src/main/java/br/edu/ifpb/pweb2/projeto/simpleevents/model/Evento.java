@@ -5,6 +5,7 @@ import java.util.List;
 import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,14 +44,19 @@ public class Evento {
 	private String nome;
 	private String local;
 	private boolean isFinalizado;
-	
+
 	@ManyToOne
 	private Usuario dono;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "evento", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "evento", cascade = CascadeType.ALL)
+    @ElementCollection
 	private List<Vaga> vagas = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy="evento", cascade = CascadeType.ALL)
-	private List<Avaliacao> avaliacao = new ArrayList<>();
+    private List<Avaliacao> avaliacao = new ArrayList<>();
+    
+    public void addVaga(Vaga vaga) {
+        this.vagas.add(vaga);
+    }
 
 }
