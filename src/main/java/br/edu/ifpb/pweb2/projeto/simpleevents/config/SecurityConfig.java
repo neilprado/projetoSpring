@@ -43,9 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
         http.authorizeRequests().antMatchers("/").permitAll().and().authorizeRequests().antMatchers("/signup", "/login")
-                .access("isAnonymous()").and().authorizeRequests().antMatchers("/logout", "/especialidades/**")
-                .access("isAuthenticated()").and().formLogin().loginPage("/login").successHandler(successHandler())
-                .and().logout();
+                .access("isAnonymous()").and().authorizeRequests()
+                .antMatchers("/logout", "/especialidades/**", "/my-events").access("isAuthenticated()").and()
+                .formLogin().loginPage("/login").successHandler(successHandler()).and().logout();
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);

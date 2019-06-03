@@ -32,77 +32,90 @@ public class EventoController {
     @Autowired
     private VagaDAO vagaDao;
 
-  @RequestMapping()
-  public ModelAndView listAll(String inputSearch) {
-    ModelAndView mav = new ModelAndView("eventos/events");
-    List<Evento> eventos;
-    if (inputSearch != null) {
-        eventos = dao.findByNomeContainingIgnoreCase(inputSearch);
-        if (eventos.size() == 0) {
-            Especialidade esp = especialidadeDao.findByNomeIgnoreCase(inputSearch);
-            Vaga vaga = vagaDao.findByEspecialidade(esp);
-            eventos = dao.findAllByVagas(vaga);          
+    @RequestMapping()
+    public ModelAndView listAll(String inputSearch) {
+        ModelAndView mav = new ModelAndView("eventos/events");
+        List<Evento> eventos;
+        if (inputSearch != null) {
+            eventos = dao.findByNomeContainingIgnoreCase(inputSearch);
+            if (eventos.size() == 0) {
+                Especialidade esp = especialidadeDao.findByNomeIgnoreCase(inputSearch);
+                Vaga vaga = vagaDao.findByEspecialidade(esp);
+                eventos = dao.findAllByVagas(vaga);
+            }
+        } else {
+            eventos = dao.findAll();
         }
-    } else {
-        eventos = dao.findAll();
+        mav.addObject("eventos", eventos);
+        return mav;
     }
-    mav.addObject("eventos", eventos);
-    return mav;
-  }
 
-  @GetMapping("/form")
-  public String getForm(Model model) {
-      model.addAttribute("evento", new Evento());
-      List<Especialidade> especialidades = especialidadeDao.findAll();
-      model.addAttribute("especialidades", especialidades);
-      return "eventos/addEvent";
-  }
-  
-  @PostMapping
-  public String save(Evento evento, Authentication auth, @RequestParam("especialidades") List<Long> especialidades, @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
-      Optional<Especialidade> esp;
-      int i = 0;
-      for (Long id : especialidades) {
-          esp = especialidadeDao.findById(id);
-          Vaga vaga = new Vaga();
-          vaga.setEspecialidade(esp.get());
-          vaga.setQuantidade(quantidadevagas.get(i));
-          vaga.setEvento(evento);
-          evento.addVaga(vaga);
-          i++;
-      }
-      String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
-      Usuario currentUser = userDao.findByEmail(userEmail);
-      evento.setDono(currentUser);
-	  dao.save(evento);
-	  return "redirect:events";
-  }
-  
-  @GetMapping("/{id}")
-  public ModelAndView getEvent(@PathVariable("id") Long id) {
-      ModelAndView mav = new ModelAndView("eventos/showEvent");
-      Optional<Evento> evento = dao.findById(id);
-      mav.addObject("evento", evento.get());
-	  return mav;
-  }
+    @GetMapping("/form")
+    public String getForm(Model model) {
+        model.addAttribute("evento", new Evento());
+        List<Especialidade> especialidades = especialidadeDao.findAll();
+        model.addAttribute("especialidades", especialidades);
+        return "eventos/addEvent";
+    }
 
-  @DeleteMapping("/events/{id}")
-  public String delete(Long id) {
-	  dao.deleteById(id);
-	  return "redirect:events";
-	  //Mensagem de sucesso
-  }
-  
-  @PutMapping("/events/{id}")
-  public String update(@RequestBody Evento evento, @PathVariable Long id) {
-	  Optional<Evento> event = dao.findById(id);
-	  if(!event.isPresent()) {
-		  return "redirect:events";
-		  //Mensagem de erro
-	  }
-	  evento.setId(id);
-	  dao.save(evento);
-	  return "redirect:events";
-	  //Mensagem de sucesso
-  }
+    @PostMapping
+    public String save(Evento evento, Authentication auth, @RequestParam("especialidades") List<Long> especialidades,
+            @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
+        Optional<Especialidade> esp;
+        int i = 0;
+        for (Long id : especialidades) {
+            esp = especialidadeDao.findById(id);
+            Vaga vaga = new Vaga();
+            vaga.setEspecialidade(esp.get());
+            vaga.setQuantidade(quantidadevagas.get(i));
+            vaga.setEvento(evento);
+            evento.addVaga(vaga);
+            i++;
+        }
+        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+        Usuario currentUser = userDao.findByEmail(userEmail);
+        evento.setDono(currentUser);
+        dao.save(evento);
+        return "redirect:events";
+    }
+
+    @GetMapping("/{id}")
+    public ModelAndView getEvent(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("eventos/showEvent");
+        Optional<Evento> evento = dao.findById(id);
+        mav.addObject("evento", evento.get());
+        return mav;
+    }
+
+    @DeleteMapping("/events/{id}")
+    public String delete(Long id) {
+        dao.deleteById(id);
+        return "redirect:events";
+        // Mensagem de sucesso
+    }
+
+    @PutMapping("/events/{id}")
+    public String update(@RequestBody Evento evento, @PathVariable Long id) {
+        Optional<Evento> event = dao.findById(id);
+        if (!event.isPresent()) {
+            return "redirect:events";
+            // Mensagem de erro
+        }
+        evento.setId(id);
+        dao.save(evento);
+        return "redirect:events";
+        // Mensagem de sucesso
+    }
+
+    // MY EVENTS
+
+    @GetMapping("/my-events")
+    public ModelAndView getMyEvents(Authentication auth) {
+        ModelAndView mav = new ModelAndView("meus-eventos/myEvents");
+        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+        Usuario currentUser = userDao.findByEmail(userEmail);
+        List<Evento> eventos = dao.findAllByDono(currentUser);
+        mav.addObject("eventos", eventos);
+        return mav;
+    }
 }
