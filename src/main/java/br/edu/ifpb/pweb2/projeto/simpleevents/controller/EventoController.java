@@ -31,7 +31,7 @@ import br.edu.ifpb.pweb2.projeto.simpleevents.service.CustomUserDetails;
 @RequestMapping("/events")
 public class EventoController {
     @Autowired
-    private EventoDAO eventoDao;
+    private EventoDAO dao;
     @Autowired
     private UsuarioDAO userDao;
     @Autowired
@@ -113,7 +113,7 @@ public class EventoController {
         Evento evento = dao.findById(id).get();
         if (evento.getDono() == currentUser)
             dao.deleteById(id);
-        return "redirect:events";
+        return "redirect:/events/my-events";
         // Mensagem de sucesso
     }
 

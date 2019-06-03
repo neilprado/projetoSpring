@@ -41,12 +41,12 @@
             </li>
           </ul>
           <div class="card-body">
-            <a
-              th:href="@{'events/' + ${evento.id}}"
-              class="card-link"
-              style="color: #17a2b8;"
-              >Ver Evento</a
-            >
+            <div class="row align-items-center justify-content-end">
+              <a href="#">Editar</a>
+              <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
+                <button type="submit" style="margin-left: 10px;" class="btn btn-danger">Delete</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
