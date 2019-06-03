@@ -1,5 +1,22 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.controller;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.UsuarioDAO;
@@ -10,21 +27,11 @@ import br.edu.ifpb.pweb2.projeto.simpleevents.model.Usuario;
 import br.edu.ifpb.pweb2.projeto.simpleevents.model.Vaga;
 import br.edu.ifpb.pweb2.projeto.simpleevents.service.CustomUserDetails;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 @Controller
 @RequestMapping("/events")
 public class EventoController {
     @Autowired
-    private EventoDAO dao;
+    private EventoDAO eventoDao;
     @Autowired
     private UsuarioDAO userDao;
     @Autowired
@@ -100,8 +107,12 @@ public class EventoController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        dao.deleteById(id);
+    public String delete(Authentication auth, @PathVariable Long id) {
+        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+        Usuario currentUser = userDao.findByEmail(userEmail);
+        Evento evento = dao.findById(id).get();
+        if (evento.getDono() == currentUser)
+            dao.deleteById(id);
         return "redirect:events";
         // Mensagem de sucesso
     }
