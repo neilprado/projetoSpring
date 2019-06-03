@@ -87,26 +87,6 @@ public class EventoController {
         return mav;
     }
 
-    @DeleteMapping("/events/{id}")
-    public String delete(Long id) {
-        dao.deleteById(id);
-        return "redirect:events";
-        // Mensagem de sucesso
-    }
-
-    @PutMapping("/events/{id}")
-    public String update(@RequestBody Evento evento, @PathVariable Long id) {
-        Optional<Evento> event = dao.findById(id);
-        if (!event.isPresent()) {
-            return "redirect:events";
-            // Mensagem de erro
-        }
-        evento.setId(id);
-        dao.save(evento);
-        return "redirect:events";
-        // Mensagem de sucesso
-    }
-
     // MY EVENTS
 
     @GetMapping("/my-events")
@@ -117,5 +97,25 @@ public class EventoController {
         List<Evento> eventos = dao.findAllByDono(currentUser);
         mav.addObject("eventos", eventos);
         return mav;
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+        dao.deleteById(id);
+        return "redirect:events";
+        // Mensagem de sucesso
+    }
+
+    @PutMapping("/{id}")
+    public String update(@RequestBody Evento evento, @PathVariable Long id) {
+        Optional<Evento> event = dao.findById(id);
+        if (!event.isPresent()) {
+            return "redirect:events";
+            // Mensagem de erro
+        }
+        evento.setId(id);
+        dao.save(evento);
+        return "redirect:events";
+        // Mensagem de sucesso
     }
 }
