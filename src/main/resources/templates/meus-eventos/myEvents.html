@@ -42,7 +42,7 @@
           </ul>
           <div class="card-body">
             <div class="row align-items-center justify-content-end">
-              <a href="#">Editar</a>
+              <a th:href="@{'my-events/' + ${evento.id}}">Editar</a>
               <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
                 <button type="submit" style="margin-left: 10px;" class="btn btn-danger">Delete</button>
               </form>
