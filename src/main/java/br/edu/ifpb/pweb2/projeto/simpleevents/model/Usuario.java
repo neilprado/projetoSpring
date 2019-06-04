@@ -37,7 +37,7 @@ public class Usuario implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date dataNascimento;
 	
-	@Pattern(regexp = "^\\([1-9]{2}\\) (?:[2-8]|9[1-9])[0-9]{3}\\-[0-9]{4}$", message = "Informe um telefone [(83) 99999-8888]")
+	@Pattern(regexp = "^\\([1-9]{2}\\)(?:[2-8]|9[1-9])[0-9]{3}\\-[0-9]{4}$", message = "Informe um telefone [(83) 99999-8888]")
 	private String telefone;
 
 	//@Size(min=8, message="A senha deve ter no mínimo oito caracteres")
