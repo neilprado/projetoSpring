@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -43,11 +42,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/").permitAll().and()
-                .authorizeRequests().antMatchers("/signup", "/login").access("isAnonymous()").and()
-                .authorizeRequests().antMatchers("/logout", "/especialidades/**", "/events/**").access("isAuthenticated()").and()
-                .formLogin().loginPage("/login").successHandler(successHandler())
-                .and().logout();
+        http.authorizeRequests().antMatchers("/").permitAll().and().authorizeRequests().antMatchers("/signup", "/login")
+                .access("isAnonymous()").and().authorizeRequests()
+                .antMatchers("/logout", "/especialidades/**", "/my-events").access("isAuthenticated()").and()
+                .formLogin().loginPage("/login").successHandler(successHandler()).and().logout();
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
