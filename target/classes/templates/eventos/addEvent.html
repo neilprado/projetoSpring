@@ -12,9 +12,9 @@
 <body>
 <div th:insert="~{fragments :: navbar}"></div>
 <div id="addEvent">
-    <div class="container">
-        <div id="login-row" class="row justify-content-center align-items-center">
-            <div id="login-column" class="col-md-6">
+    <div class="container mt-5">
+        <div id="login-row" class="row justify-content-center align-items-center ">
+            <div id="login-column" class="col-md-6 bg-white p-4">
                 <div id="login-box" class="col-md-12">
                     <form id="login-form" class="form" action="/events" th:object="${evento}" method="post">
                         <h3 class="text-center text-info">Adicionar Evento</h3>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-group row">
                             <label for="descricao" class="text-info">Descrição:</label><br>
-                            <textarea type="text" name="descricao" id="descricao" th:field="*{descricao}" class="form-control" required></textarea>
+                            <textarea name="descricao" id="descricao" th:field="*{descricao}" class="form-control" required></textarea>
                         </div>
                         <div class="form-group row">
                             <p class="text-info">Selecionar Especialidades</p>

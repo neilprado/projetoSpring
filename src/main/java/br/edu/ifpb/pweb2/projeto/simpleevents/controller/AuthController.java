@@ -35,8 +35,9 @@ public class AuthController {
 
     @GetMapping("/signup")
     public String signUp(Model model, @ModelAttribute("check_user") Usuario check_user) {
-        if (check_user != null) {
+        if (check_user.getEmail() != null) {
             model.addAttribute("usuario", check_user);
+            model.addAttribute("erro_email", true);
         } else {
           model.addAttribute("usuario", new Usuario());
         }
@@ -49,7 +50,7 @@ public class AuthController {
                           RedirectAttributes redirectAttributes) {
         Usuario check_user = userRepository.findByEmail(user.getEmail());
         if (check_user != null) {
-            redirectAttributes.addFlashAttribute("check_user", check_user);
+            redirectAttributes.addFlashAttribute("check_user", user);
             return "redirect:/signup";
         }
         String pwd = user.getPassword();
@@ -69,7 +70,7 @@ public class AuthController {
         return "login";
     }
 
-    @GetMapping
+    @GetMapping("/home")
     public String index() {
         return "index";
     }

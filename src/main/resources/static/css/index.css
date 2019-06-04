@@ -8,7 +8,6 @@ body {
 #login .container #login-row #login-column #login-box {
   margin-top: 120px;
   max-width: 600px;
-  height: 320px;
   border: 1px solid #9C9C9C;
   background-color: #EAEAEA;
 }
@@ -19,17 +18,21 @@ body {
   margin-top: -85px;
 }
 
-#input_error_icon {
-  position: absolute;
-  bottom: 16px;
-  right: 15px;
-  width: 12px;
-  height: 12px;
-  color: #e02b0b;
+.form-group {
+  position: relative;
 }
 
-.form-group{
-  position: relative;
+.input_error_icon {
+  position:absolute;
+  bottom:2px;
+  right:5px;
+  width:24px;
+  height:24px;
+  color: #ff2f2e;
+}
+
+.border_navbar{
+  border-bottom: 2px solid #d2d6e4;
 }
 
 

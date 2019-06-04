@@ -7,12 +7,12 @@
   <link rel="stylesheet"
   th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/css/index.css}">
+  <script src="https://kit.fontawesome.com/bc9a96a448.js"></script>
   <title>Sign Up</title>
 </head>
 <body>
   <div th:insert="~{fragments :: navbar}"></div>
   <div id="login">
-      <h3 class="text-center text-white pt-5">Login form</h3>
       <div class="container">
           <div id="login-row" class="row justify-content-center align-items-center">
               <div id="login-column" class="col-md-6">
@@ -34,6 +34,8 @@
                           <div class="form-group row">
                               <label for="email" class="text-info">Email:</label><br>
                               <input type="email" name="email" id="email" th:field="*{email}" class="form-control" required>
+                              <i th:if="${erro_email}" class="fas fa-exclamation-circle input_error_icon" data-toggle="tooltip"
+                                 data-placement="bottom" title="Email já está em uso"></i>
                           </div>
                           <div class="form-group row">
                               <label for="password" class="text-info">Password:</label><br>

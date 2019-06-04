@@ -11,7 +11,10 @@
 </head>
 <body>
   <div th:insert="~{fragments :: navbar}"></div>
-    <h1>Welcome to Simple Events.</h1>
+  <div class="d-flex flex-column align-items-center my-5">
+    <h3 class="text-white">Procurando um evento ? Aqui você encontra!</h3>
+    <img th:src="@{/images/logo_transparent.png}" alt="Logo Eveent" th:width="408" th:height="250" >
+  </div>
   </div>
 </body>
 </html>
