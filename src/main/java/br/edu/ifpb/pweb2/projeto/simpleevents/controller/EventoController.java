@@ -3,6 +3,8 @@ package br.edu.ifpb.pweb2.projeto.simpleevents.controller;
 import java.util.List;
 import java.util.Optional;
 
+import br.edu.ifpb.pweb2.projeto.simpleevents.dao.*;
+import br.edu.ifpb.pweb2.projeto.simpleevents.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -17,14 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EspecialidadeDAO;
-import br.edu.ifpb.pweb2.projeto.simpleevents.dao.EventoDAO;
-import br.edu.ifpb.pweb2.projeto.simpleevents.dao.UsuarioDAO;
-import br.edu.ifpb.pweb2.projeto.simpleevents.dao.VagaDAO;
-import br.edu.ifpb.pweb2.projeto.simpleevents.model.Especialidade;
-import br.edu.ifpb.pweb2.projeto.simpleevents.model.Evento;
-import br.edu.ifpb.pweb2.projeto.simpleevents.model.Usuario;
-import br.edu.ifpb.pweb2.projeto.simpleevents.model.Vaga;
 import br.edu.ifpb.pweb2.projeto.simpleevents.service.CustomUserDetails;
 
 @Controller
@@ -38,6 +32,8 @@ public class EventoController {
     private EspecialidadeDAO especialidadeDao;
     @Autowired
     private VagaDAO vagaDao;
+    @Autowired
+    private CandidatoDAO candidatoDAO;
 
     @RequestMapping()
     public ModelAndView listAll(String inputSearch) {
@@ -94,16 +90,40 @@ public class EventoController {
         return mav;
     }
 
+    @PostMapping("/{id}/{especialidade}")
+    public String candidate(@PathVariable("id") Long id, @PathVariable String especialidade,
+                            Authentication auth) {
+        Evento evento = dao.getOne(id);
+        Especialidade espec = especialidadeDao.findByNomeIgnoreCase(especialidade);
+        Vaga vaga = vagaDao.findByEventoAndEspecialidade(evento, espec);
+        if (vaga.getQuantidade() == 0) return "redirect:/events/"; // Implementar Erro
+
+        Candidato candidato = new Candidato();
+        candidato.setAprovacao(Status.NAO_AVALIADO);
+        candidato.setUsuario(getLoggedUser(auth));
+        candidato.setVaga(vaga);
+
+        vaga.getCandidatos().add(candidato);
+        vagaDao.save(vaga);
+        candidatoDAO.save(candidato);
+
+        return "redirect:/events/" + id;
+    }
+
     // MY EVENTS
 
     @GetMapping("/my-events")
     public ModelAndView getMyEvents(Authentication auth) {
         ModelAndView mav = new ModelAndView("meus-eventos/myEvents");
-        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
-        Usuario currentUser = userDao.findByEmail(userEmail);
+        Usuario currentUser = getLoggedUser(auth);
         List<Evento> eventos = dao.findAllByDono(currentUser);
         mav.addObject("eventos", eventos);
         return mav;
+    }
+
+    public Usuario getLoggedUser(Authentication auth){
+        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+        return userDao.findByEmail(userEmail);
     }
 
     @DeleteMapping("/{id}")

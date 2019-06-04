@@ -29,15 +29,14 @@
             <tr>
                 <th>Profissional</th>
                 <th>Vagas</th>
+                <th>Ações</th>
             </tr>
             <tr th:each="vaga : ${evento.vagas}">
                 <td th:text="${vaga.especialidade.nome}"></td>
                 <td th:text="${vaga.quantidade}"></td>
+                <td><a href="">Candidatar-se</a></td>
             </tr>
         </table>
-    </div>
-    <div class="row justify-content-center">
-        <a href="#" class="btn btn-outline-info">Candidatar-se</a>
     </div>
 </div>
 </body>
