@@ -1,5 +1,6 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,7 +108,7 @@ public class EventoController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(Authentication auth, @PathVariable Long id) {
+    public String delete(Authentication auth, @PathVariable("id") Long id) {
         String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
         Usuario currentUser = userDao.findByEmail(userEmail);
         Evento evento = dao.findById(id).get();
@@ -118,15 +119,50 @@ public class EventoController {
     }
 
     @PutMapping("/{id}")
-    public String update(@RequestBody Evento evento, @PathVariable Long id) {
-        Optional<Evento> event = dao.findById(id);
-        if (!event.isPresent()) {
-            return "redirect:events";
-            // Mensagem de erro
+    public String update(Authentication auth, Evento evento, @PathVariable("id") Long id,
+            @RequestParam("especialidades") List<Long> especialidades,
+            @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
+
+        Evento event = dao.findById(id).get();
+        event.setNome(evento.getNome());
+        event.setLocal(evento.getLocal());
+        event.setData(evento.getData());
+        event.setDescricao(evento.getDescricao());
+
+        int i = 0;
+        for (Long idEspecialidade : especialidades) {
+            Boolean create = true;
+            for (Vaga vaga : event.getVagas()) {
+                if (vaga.getEspecialidade().getId() == idEspecialidade) {
+                    vaga.setQuantidade(quantidadevagas.get(i));
+                    create = false;
+                }
+            }
+
+            if (create) {
+                Especialidade esp = especialidadeDao.findById(idEspecialidade).get();
+                Vaga novaVaga = new Vaga();
+                novaVaga.setEspecialidade(esp);
+                novaVaga.setQuantidade(quantidadevagas.get(i));
+                novaVaga.setEvento(event);
+                event.addVaga(novaVaga);
+            }
+            i++;
+            create = true;
         }
-        evento.setId(id);
-        dao.save(evento);
-        return "redirect:events";
+
+        dao.save(event);
+        return "redirect:/events/my-events";
         // Mensagem de sucesso
+    }
+
+    @GetMapping("/my-events/{id}")
+    public ModelAndView getMyEvent(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("meus-eventos/showMyEvent");
+        Optional<Evento> evento = dao.findById(id);
+        mav.addObject("evento", evento.get());
+        List<Especialidade> especialidades = especialidadeDao.findAll();
+        mav.addObject("especialidades", especialidades);
+        return mav;
     }
 }
