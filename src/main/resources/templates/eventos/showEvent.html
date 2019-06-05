@@ -27,7 +27,7 @@
                 <td class="align-middle" th:text="${vaga.especialidade.nome}"></td>
                 <td class="align-middle" th:text="${vaga.quantidade}"></td>
                 <td align="center">
-                    <form method="POST" th:if="${#lists.contains(vaga.candidatos.usuario, checkUser)}"
+                    <form method="POST"
                           th:action="@{ ${evento.id} + '/' + ${vaga.especialidade.nome}}">
                         <button type="button" class="btn btn-outline-secondary btn-candidate">
                             Candidatar-se
