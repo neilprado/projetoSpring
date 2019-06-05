@@ -188,7 +188,20 @@ public class EventoController {
             i++;
             create = true;
         }
-
+        ArrayList<Especialidade> check = new ArrayList<>();
+        ArrayList<Especialidade> all = (ArrayList<Especialidade>) especialidadeDao.findAll();
+        for (Especialidade esp : all) {
+            if (!especialidades.contains(esp.getId())) {
+                check.add(esp);
+            } 
+        }
+        for (Especialidade esp : check) {
+            for (Vaga vaga : event.getVagas()) {
+                if (esp.getId() == vaga.getEspecialidade().getId()) {
+                    vaga.setEvento(null);
+                }
+            }
+        }
         dao.save(event);
         return "redirect:/events/my-events";
         // Mensagem de sucesso
