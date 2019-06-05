@@ -87,6 +87,7 @@ public class EventoController {
             mav.addObject("evento", e);
             if (auth != null && auth.isAuthenticated()) {
                 Usuario currentUser = getLoggedUser(auth);
+                mav.addObject("currentUser", currentUser);
                 if (evento.get().getDono().getUser_id().equals(currentUser.getUser_id())) {
                     mav.setViewName("/eventos/showEventOwner");
                     List<Candidato> candidatos = candidatoDAO.findByVaga_Evento(e);
