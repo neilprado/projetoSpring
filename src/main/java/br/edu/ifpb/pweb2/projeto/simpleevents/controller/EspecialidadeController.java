@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,20 +47,24 @@ public class EspecialidadeController {
   @DeleteMapping("/{id}")
   public String delete(@PathVariable Long id) {
 	  dao.deleteById(id);
-	  return "redirect:especialidades";
+	  return "redirect:/especialidades/list";
 	  //Exibir mensagem de sucesso
   }
   
   @PutMapping("/{id}")
-  public String update(@RequestBody Especialidade especialidade, @PathVariable Long id) {
-	  Optional<Especialidade> specialist = dao.findById(id);
-	  if(!specialist.isPresent()) {
-		  return "redirect:especialidades";
-		  //Mensagem de erro
-	  }
-	  especialidade.setId(id);
-	  dao.save(especialidade);
-	  return "redirect:especialidades";
-	  //Mensagem de sucesso
+  public String update(Authentication auth, Especialidade especialidade, @PathVariable("id") Long id) {
+	 Especialidade specialist = dao.findById(id).get();
+	 specialist.setNome(especialidade.getNome());
+	 specialist.setDescricao(especialidade.getDescricao());
+	 dao.save(especialidade);
+	 return "redirect:/especialidades/list";
+  }
+  
+  @GetMapping("/especialidades/{id}")
+  public ModelAndView getMyEspecialidade(@PathVariable("id") Long id) {
+	  ModelAndView mav = new ModelAndView("especialidades/mySpecialty");
+	  Optional<Especialidade> especialidade = dao.findById(id);
+	  mav.addObject("especialidade", especialidade.get());
+	  return mav;
   }
 }
