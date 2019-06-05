@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
@@ -18,64 +19,79 @@ import java.util.Set;
 @Controller
 public class AuthController {
 
-  @Autowired
-  private UsuarioDAO userRepository;
+    @Autowired
+    private UsuarioDAO userRepository;
 
-  @Autowired
-  private RoleDAO roleRepository;
+    @Autowired
+    private RoleDAO roleRepository;
 
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
-  @GetMapping("/login")
-  public String login(HttpServletRequest request) {
-    return "login";
-  }
-
-  @GetMapping("/signup")
-  public String signUp(Model model) {
-    model.addAttribute("usuario", new Usuario());
-    return "signup";
-  }
-
-  @PostMapping("/signup")
-  public String addUser(@ModelAttribute(value = "usuario") Usuario user, @ModelAttribute(value = "password2") String pass2) {
-    String pwd = user.getPassword();
-    String encryptPwd = passwordEncoder.encode(pwd);
-    user.setPassword(encryptPwd);
-    Role role = roleRepository.findByRole("USER");
-    if (role == null) {
-      role = new Role();
-      role.setRole("USER");
-      roleRepository.save(role);
+    @GetMapping("/login")
+    public String login(HttpServletRequest request) {
+        return "login";
     }
-    Set<Role> roles = new HashSet<>();
-    roles.add(role);
-    user.setRoles(roles);
-    userRepository.save(user);
-    return "login";
-  }
 
-  @GetMapping
-  public String index() {return "index";}
-  
-  @DeleteMapping("/{id}")
-  public String delete(@PathVariable Long id) {
-	 userRepository.deleteById(id);
-	 return "redirect:index";
-  }
+    @GetMapping("/signup")
+    public String signUp(Model model, @ModelAttribute("check_user") Usuario check_user) {
+        if (check_user.getEmail() != null) {
+            model.addAttribute("usuario", check_user);
+            model.addAttribute("erro_email", true);
+        } else {
+          model.addAttribute("usuario", new Usuario());
+        }
+        return "signup";
+    }
 
-  @PutMapping("/{id}")
-  public String update(@RequestBody Usuario usuario, @PathVariable Long id) {
-	  Optional<Usuario> user = userRepository.findById(id);
-	  if(!user.isPresent()) {
-		  return "redirect:index";
-		  //Inserir mensagem de erro
-	  }
-	  usuario.setUser_id(id);
-	  userRepository.save(usuario);
-	  return "redirect:index";
-	  //Mensagem de sucesso
-  }
+    @PostMapping("/signup")
+    public String addUser(@ModelAttribute(value = "usuario") Usuario user,
+                          @ModelAttribute(value = "password2") String pass2,
+                          RedirectAttributes redirectAttributes) {
+        Usuario check_user = userRepository.findByEmail(user.getEmail());
+        if (check_user != null) {
+            redirectAttributes.addFlashAttribute("check_user", user);
+            return "redirect:/signup";
+        }
+        String pwd = user.getPassword();
+        String encryptPwd = passwordEncoder.encode(pwd);
+        user.setPassword(encryptPwd);
+
+        Role role = roleRepository.findByRole("USER");
+        if (role == null) {
+            role = new Role();
+            role.setRole("USER");
+            roleRepository.save(role);
+        }
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+        userRepository.save(user);
+        return "login";
+    }
+
+    @GetMapping("/home")
+    public String index() {
+        return "index";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long id) {
+        userRepository.deleteById(id);
+        return "redirect:index";
+    }
+
+    @PutMapping("/{id}")
+    public String update(@RequestBody Usuario usuario, @PathVariable Long id) {
+        Optional<Usuario> user = userRepository.findById(id);
+        if (!user.isPresent()) {
+            return "redirect:index";
+            //Inserir mensagem de erro
+        }
+        usuario.setUser_id(id);
+        userRepository.save(usuario);
+        return "redirect:index";
+        //Mensagem de sucesso
+    }
 
 }

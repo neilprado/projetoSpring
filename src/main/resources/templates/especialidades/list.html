@@ -21,6 +21,14 @@
         <tr th:each="especialidade : ${especialidades}">
             <td th:text="${especialidade.nome}"></td>
             <td th:text="${especialidade.descricao}"></td>
+           	<td>
+           		<a th:href="@{'especialidades/' + ${especialidade.id}}">
+           			<button type="submit" style="margin-left: 10px;" class="btn btn-secondary">Editar</button>
+           		</a>
+            	<form th:action="@{/especialidades/{id}(id=${especialidade.id})}" th:method="delete">
+            		<button type="submit" style="margin-left: 10px;" class="btn btn-danger">Delete</button>
+            	</form>
+            </td>
         </tr>
     </table>
 </div>

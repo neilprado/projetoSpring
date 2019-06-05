@@ -1,5 +1,10 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.model;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,6 +19,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 @Table(name="TB_VAGA")
 public class Vaga {
 	
@@ -30,35 +39,5 @@ public class Vaga {
 	
 	@OneToOne
 	private Especialidade especialidade;
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public int getQuantidade() {
-		return quantidade;
-	}
-	public void setQuantidade(int quantidade) {
-		this.quantidade = quantidade;
-	}
-	public Evento getEvento() {
-		return evento;
-	}
-	public void setEvento(Evento evento) {
-		this.evento = evento;
-	}
-	public List<Candidato> getCandidatos() {
-		return candidatos;
-	}
-	public void setCandidatos(List<Candidato> candidatos) {
-		this.candidatos = candidatos;
-	}
-	public Especialidade getEspecialidade() {
-		return especialidade;
-	}
-	public void setEspecialidade(Especialidade especialidade) {
-		this.especialidade = especialidade;
-	}
+
 }
