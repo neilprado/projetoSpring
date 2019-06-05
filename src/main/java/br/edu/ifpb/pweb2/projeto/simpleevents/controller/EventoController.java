@@ -79,7 +79,8 @@ public class EventoController {
 
     @GetMapping("/{id}")
     public ModelAndView getEvent(@PathVariable("id") Long id, Authentication auth,
-                                 @ModelAttribute("success") String success) {
+                                 @ModelAttribute("success") String success,
+                                 @ModelAttribute("error") String error) {
         ModelAndView mav = new ModelAndView("/eventos/showEvent");
         Optional<Evento> evento = dao.findById(id);
         if (evento.isPresent()) {
@@ -87,7 +88,7 @@ public class EventoController {
             mav.addObject("evento", e);
             if (auth != null && auth.isAuthenticated()) {
                 Usuario currentUser = getLoggedUser(auth);
-                mav.addObject("currentUser", currentUser);
+                mav.addObject("currentUser", currentUser);;
                 if (evento.get().getDono().getUser_id().equals(currentUser.getUser_id())) {
                     mav.setViewName("/eventos/showEventOwner");
                     List<Candidato> candidatos = candidatoDAO.findByVaga_Evento(e);
@@ -96,6 +97,9 @@ public class EventoController {
             }
             if (!success.equals("")) {
                 mav.addObject("success", true);
+            }
+            if (!error.equals("")) {
+                mav.addObject("error", true);
             }
         }
         return mav;
@@ -107,7 +111,11 @@ public class EventoController {
         Evento evento = dao.getOne(id);
         Especialidade espec = especialidadeDao.findByNomeIgnoreCase(especialidade);
         Vaga vaga = vagaDao.findByEventoAndEspecialidade(evento, espec);
-        if (vaga.getQuantidade() == 0) return "redirect:/events/"; // Implementar Erro
+        Candidato currentCandidate = candidatoDAO.findByUsuarioAndVaga(getLoggedUser(auth), vaga);
+        if (vaga.getQuantidade() == 0 || currentCandidate != null) {
+            redirectAttributes.addFlashAttribute("error", "error");
+            return "redirect:/events/" + id;
+        }
 
         Candidato candidato = new Candidato();
         candidato.setAprovacao(Status.NAO_AVALIADO);
@@ -115,7 +123,6 @@ public class EventoController {
         candidato.setVaga(vaga);
 
         vaga.getCandidatos().add(candidato);
-        vagaDao.save(vaga);
         candidatoDAO.save(candidato);
 
         redirectAttributes.addFlashAttribute("success", "success");

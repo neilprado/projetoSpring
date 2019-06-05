@@ -66,7 +66,8 @@
     </div>
 </div>
 
-<div th:if="${success != '' }"  class="modal fade" id="modalSuccess" tabindex="-1" role="dialog" aria-labelledby="exampleModalSucces"
+<div th:if="${success != '' }" class="modal fade" id="modalSuccess" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalSucces"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -85,7 +86,8 @@
     </div>
 </div>
 
-<div th:if="${error != '' }"  class="modal fade" id="modalError" tabindex="-1" role="dialog" aria-labelledby="exampleModalError"
+<div th:if="${error != '' }" class="modal fade" id="modalError" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalError"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -105,10 +107,13 @@
 
 <script>
 
-    $(document).ready( function () {
-       if ($("#modalSuccess") != undefined) {
-           $("#modalSuccess").modal('show');
-       }
+    $(document).ready(function () {
+        if ($("#modalSuccess") != undefined) {
+            $("#modalSuccess").modal('show');
+        }
+        if ($("#modalError") != undefined) {
+            $("#modalError").modal('show');
+        }
     });
 
     $(".btn-candidate").on('click', function (event) {
