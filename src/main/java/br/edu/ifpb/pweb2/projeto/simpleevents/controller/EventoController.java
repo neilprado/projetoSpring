@@ -91,8 +91,10 @@ public class EventoController {
                 mav.addObject("currentUser", currentUser);;
                 if (evento.get().getDono().getUser_id().equals(currentUser.getUser_id())) {
                     mav.setViewName("/eventos/showEventOwner");
-                    List<Candidato> candidatos = candidatoDAO.findByVaga_Evento(e);
+                    List<Candidato> candidatos = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.NAO_AVALIADO);
                     mav.addObject("candidatos", candidatos);
+                    List<Candidato> selecionados = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.APROVADO);
+                    mav.addObject("selecionados", selecionados);
                 }
             }
             if (!success.equals("")) {
@@ -102,6 +104,35 @@ public class EventoController {
                 mav.addObject("error", true);
             }
         }
+        return mav;
+    }
+
+    @PostMapping("/candidate/confirm/{id}")
+    public ModelAndView confimCandidate(@PathVariable("id") Long id){
+        ModelAndView mav  = new ModelAndView("/");
+        Optional<Candidato> candidatoCheck = candidatoDAO.findById(id);
+        if (candidatoCheck.isPresent()){
+            Candidato candidato = candidatoCheck.get();
+            candidato.setAprovacao(Status.APROVADO);
+            int qtVagas = candidato.getVaga().getQuantidade();
+            // Testar se quantidade de vagas é 0.
+            candidato.getVaga().setQuantidade(--qtVagas);
+            candidatoDAO.save(candidato);
+            mav  = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+        } 
+        return mav;
+    }
+
+    @PostMapping("/candidate/deny/{id}")
+    public ModelAndView denyCandidate(@PathVariable("id") Long id){
+        ModelAndView mav  = new ModelAndView("/");
+        Optional<Candidato> candidatoCheck = candidatoDAO.findById(id);
+        if (candidatoCheck.isPresent()){
+            Candidato candidato = candidatoCheck.get();
+            candidato.setAprovacao(Status.NAO_APROVADO);
+            candidatoDAO.save(candidato);
+            mav  = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+        } 
         return mav;
     }
 

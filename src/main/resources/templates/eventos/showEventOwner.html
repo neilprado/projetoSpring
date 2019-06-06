@@ -3,7 +3,7 @@
 <head th:replace="~{head :: head}"></head>
 <body>
 <div th:insert="~{fragments :: navbar}"></div>
-<div class="container d-flex flex-column bg-white mt-5" style="">
+<div class="container d-flex flex-column bg-white mt-5">
     <div class="row justify-content-center">
         <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
     </div>
@@ -25,6 +25,10 @@
             <li class="nav-item">
                 <a class="nav-link" id="solicitacao-tab" data-toggle="tab" href="#solicitacao" role="tab"
                    aria-controls="solicitacao" aria-selected="false">Solicitações</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="selecionados-tab" data-toggle="tab" href="#selecionados" role="tab"
+                   aria-controls="selecionados" aria-selected="false">Equipe</a>
             </li>
 
         </ul>
@@ -51,11 +55,59 @@
                         <td width="40%" th:text="${candidato.usuario.nome}"></td>
                         <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
                         <td align="center">
-                            <button type="button" class="btn btn-success">Aceitar</button>
-                            <button type="button" class="btn btn-danger">Negar</button>
+                        <form method="POST" th:action="@{ 'candidate/confirm/' + ${candidato.id}}">
+                            <button type="button" class="btn btn-success btn-candidate">
+                                Aceitar
+                            </button>
+                        </form>
+                        <form method="POST" th:action="@{ 'candidate/deny/' + ${candidato.id}}">
+                            <button type="button" class="btn btn-danger btn-candidate">
+                                Negar
+                            </button>
+                        </form>
                         </td>
                     </tr>
                 </table>
+            </div>
+            <div class="tab-pane fade" id="selecionados" role="tabpanel" aria-labelledby="selecionados-tab">
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th >Candidato</th>
+                        <th colspan="2" >Vaga</th>
+                    </tr>
+                    <tr th:each="candidato : ${selecionados}">
+                        <td width="40%" th:text="${candidato.usuario.nome}"></td>
+                        <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                        <td align="center">
+                            <button type="button" class="btn btn-danger">Excluir</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalCandidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Solicitação</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-candidate-body">
+                
+            </div>
+            <div class="modal-footer">
+                <form method="POST" id="modal-form">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" name="submit" value="value" class="btn btn-success">Confirmar
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -71,6 +123,18 @@
     $('.nav-tabs a').on('shown.bs.tab', function (e) {
         window.location.hash = e.target.hash;
     })
+
+    $(".btn-candidate").on('click', function (event) {
+        event.preventDefault();
+        if ($(this).text().trim() === "Aceitar") 
+            $('#modal-candidate-body').html("Você deseja <strong>confirmar</strong> esse candidato na equipe ?")
+        else
+            $('#modal-candidate-body').html("Você deseja <strong>negar</strong> a solicitação deste candidato na equipe ?")
+        var action = $(this).parent().attr('action');
+        $('#modal-form').attr('action', action);
+        $('#modalCandidate').modal('show');
+    });
+
 </script>
 </body>
 </html>
