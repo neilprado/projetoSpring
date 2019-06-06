@@ -108,30 +108,44 @@ public class EventoController {
     }
 
     @PostMapping("/candidate/confirm/{id}")
-    public ModelAndView confimCandidate(@PathVariable("id") Long id){
+    public ModelAndView confimCandidate(@PathVariable("id") Long id, Authentication auth){
         ModelAndView mav  = new ModelAndView("/");
         Optional<Candidato> candidatoCheck = candidatoDAO.findById(id);
+        Usuario usuario = getLoggedUser(auth);
         if (candidatoCheck.isPresent()){
             Candidato candidato = candidatoCheck.get();
-            candidato.setAprovacao(Status.APROVADO);
             int qtVagas = candidato.getVaga().getQuantidade();
-            // Testar se quantidade de vagas é 0.
-            candidato.getVaga().setQuantidade(--qtVagas);
-            candidatoDAO.save(candidato);
-            mav  = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+            if(candidato.getVaga().getEvento().getDono().getUser_id().equals(usuario.getUser_id()) && qtVagas != 0) {
+                List<Candidato> aplicacoes = candidatoDAO
+                        .findByUsuarioAndVaga_Evento(candidato.getUsuario(), candidato.getVaga().getEvento());
+                for (Candidato aplicacao : aplicacoes){
+                    if (!aplicacao.getId().equals(candidato.getId())
+                            && aplicacao.getAprovacao() == Status.NAO_AVALIADO) {
+                        aplicacao.setAprovacao(Status.NAO_APROVADO);
+                        candidatoDAO.save(aplicacao);
+                    }
+                }
+                candidato.setAprovacao(Status.APROVADO);
+                candidato.getVaga().diminuirQuantidade();
+                candidatoDAO.save(candidato);
+                mav = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+            }
         } 
         return mav;
     }
 
     @PostMapping("/candidate/deny/{id}")
-    public ModelAndView denyCandidate(@PathVariable("id") Long id){
+    public ModelAndView denyCandidate(@PathVariable("id") Long id, Authentication auth){
         ModelAndView mav  = new ModelAndView("/");
         Optional<Candidato> candidatoCheck = candidatoDAO.findById(id);
+        Usuario usuario = getLoggedUser(auth);
         if (candidatoCheck.isPresent()){
             Candidato candidato = candidatoCheck.get();
-            candidato.setAprovacao(Status.NAO_APROVADO);
-            candidatoDAO.save(candidato);
-            mav  = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+            if(candidato.getVaga().getEvento().getDono().getUser_id().equals(usuario.getUser_id())) {
+                candidato.setAprovacao(Status.NAO_APROVADO);
+                candidatoDAO.save(candidato);
+                mav = new ModelAndView("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#solicitacao");
+            }
         } 
         return mav;
     }
@@ -158,6 +172,33 @@ public class EventoController {
 
         redirectAttributes.addFlashAttribute("success", "success");
         return "redirect:/events/" + id;
+    }
+
+    @GetMapping("/applications")
+    public ModelAndView userApplications(Authentication auth){
+        ModelAndView mav = new ModelAndView("meus-eventos/userApplications");
+        Usuario usuario = getLoggedUser(auth);
+        List<Candidato> aplicacoes = candidatoDAO.findByUsuario(usuario);
+        mav.addObject("aplicacoes", aplicacoes);
+        return mav;
+    }
+
+    @PostMapping("/applications/cancel/{id}")
+    public ModelAndView cancelApplication(@PathVariable("id") Long id, Authentication auth){
+        ModelAndView mav = new ModelAndView("redirect:/events/applications");
+        Usuario usuario = getLoggedUser(auth);
+        Optional<Candidato> checkCandidate = candidatoDAO.findById(id);
+        if (checkCandidate.isPresent()) {
+            Candidato candidato = checkCandidate.get();
+            if (candidato.getUsuario().getUser_id().equals(usuario.getUser_id())) {
+                if (candidato.getAprovacao() == Status.APROVADO) {
+                    candidato.getVaga().aumentarQuantidade();
+                }
+                candidato.setAprovacao(Status.CANCELADO);
+                candidatoDAO.save(candidato);
+            }
+        }
+        return mav;
     }
 
     // MY EVENTS

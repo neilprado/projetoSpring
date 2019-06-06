@@ -36,6 +36,8 @@
             <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links" style="color: #17a2b8;"
                href="/events/my-events">Meus Eventos</a>
             <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links" style="color: #17a2b8;"
+               href="/events/applications">Minhas solicitações</a>
+            <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links" style="color: #17a2b8;"
                href="/logout" th:text="${#authentication?.getName()}"></a>
           </div>
         </div>

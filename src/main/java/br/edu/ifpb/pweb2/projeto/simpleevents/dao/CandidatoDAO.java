@@ -17,4 +17,8 @@ public interface CandidatoDAO extends JpaRepository<Candidato, Long> {
     Candidato findByUsuarioAndVaga(Usuario usuario, Vaga vaga);
 
 	List<Candidato> findByVaga_EventoAndAprovacao(Evento e, Status aprovacao);
+
+    List<Candidato> findByUsuario(Usuario usuario);
+
+    List<Candidato> findByUsuarioAndVaga_Evento(Usuario usuario, Evento evento);
 }

@@ -42,8 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/", "/css/**", "/images/**", "/resources/**").permitAll()
-                .and().authorizeRequests().antMatchers("/signup", "/login").access("isAnonymous()")
-                .and().authorizeRequests().antMatchers("/logout", "/especialidades/**", "/my-events").access("isAuthenticated()")
+                .and().authorizeRequests().antMatchers("/signup", "/login", "/events").access("isAnonymous()")
+                .and().authorizeRequests().antMatchers("/logout", "/especialidades/**", "/my-events", "/events/**").access("isAuthenticated()")
                 .and().formLogin().loginPage("/login").successHandler(successHandler())
                 .and().logout();
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());

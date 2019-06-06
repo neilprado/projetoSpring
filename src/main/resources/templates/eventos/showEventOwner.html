@@ -52,15 +52,17 @@
                         <th colspan="2" >Vaga</th>
                     </tr>
                     <tr th:each="candidato : ${candidatos}">
-                        <td width="40%" th:text="${candidato.usuario.nome}"></td>
-                        <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                        <td width="32%" th:text="${candidato.usuario.nome}"></td>
+                        <td width="32%" th:text="${candidato.vaga.especialidade.nome}"></td>
                         <td align="center">
-                        <form method="POST" th:action="@{ 'candidate/confirm/' + ${candidato.id}}">
+                        <form method="POST" th:action="@{ 'candidate/confirm/' + ${candidato.id}}"
+                              class="d-inline-block">
                             <button type="button" class="btn btn-success btn-candidate">
                                 Aceitar
                             </button>
                         </form>
-                        <form method="POST" th:action="@{ 'candidate/deny/' + ${candidato.id}}">
+                        <form method="POST" th:action="@{ 'candidate/deny/' + ${candidato.id}}"
+                              class="d-inline-block">
                             <button type="button" class="btn btn-danger btn-candidate">
                                 Negar
                             </button>
@@ -103,6 +105,8 @@
                 
             </div>
             <div class="modal-footer">
+                <p>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
+                    desse mesmo usuário para este evento.</p>
                 <form method="POST" id="modal-form">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" name="submit" value="value" class="btn btn-success">Confirmar
