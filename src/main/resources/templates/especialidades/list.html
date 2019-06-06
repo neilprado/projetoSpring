@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet"
-          th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <title>Especialidades</title>
 </head>
+
 <body>
-<div th:insert="~{fragments :: navbar}"></div>
-<div class="container">
-    <a href="/especialidades/form" class="btn btn-primary mb-3 ml-3">Adicionar Especialidade</a>
-    <table class="table table-hover table-stripped">
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-        </tr>
-        <tr th:each="especialidade : ${especialidades}">
-            <td th:text="${especialidade.nome}"></td>
-            <td th:text="${especialidade.descricao}"></td>
-           	<td>
-           		<a th:href="@{'especialidades/' + ${especialidade.id}}">
-           			<button type="submit" style="margin-left: 10px;" class="btn btn-secondary">Editar</button>
-           		</a>
-            	<form th:action="@{/especialidades/{id}(id=${especialidade.id})}" th:method="delete">
-            		<button type="submit" style="margin-left: 10px;" class="btn btn-danger">Delete</button>
-            	</form>
-            </td>
-        </tr>
-    </table>
-</div>
+    <div th:insert="~{fragments :: navbar}"></div>
+    <div class="container-fluid main-container my-3">
+        <div class="row justify-content-end mx-0" style="width: 100%;">
+            <a href="/especialidades/form" class="btn btn-info mb-3">Adicionar Especialidade</a>
+        </div>
+        <div class="row px-5 mx-5">
+
+            <table class="table table-hover">
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th></th>
+                </tr>
+                <tr th:each="especialidade : ${especialidades}">
+                    <td th:text="${especialidade.nome}"></td>
+                    <td th:text="${especialidade.descricao}"></td>
+                    <td>
+                        <div class="row justify-content-end">
+
+                            <a th:href="@{'/especialidades/' + ${especialidade.id}}">
+                                <button type="submit" class="btn btn-outline-info">Editar</button>
+                            </a>
+                            <form th:action="@{/especialidades/{id}(id=${especialidade.id})}" th:method="delete">
+                                <button type="submit" style="margin-left: 10px; margin-right: 10px;"
+                                    class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
+
 </html>

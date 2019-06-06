@@ -1,19 +1,40 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #17a2b8;
   height: 100vh;
+  color: #6c757d;
+  background: rgb(255,255,255);
+  background: linear-gradient(180deg, rgba(255,255,255,1) 40%, rgba(199,240,238,1) 100%);
 }
 
-#login .container #login-row #login-column #login-box {
-  margin-top: 120px;
-  max-width: 600px;
-  border: 1px solid #9C9C9C;
-  background-color: #EAEAEA;
+.main-container {
+  height: 80%;
 }
+
+.custom-navbar {
+  height: 10%;
+}
+
+.custom-navbar-link {
+  color: #555273;
+}
+
+
+.custom-navbar-link:hover {
+  color: #242330;
+}
+
+#login-box {
+  max-width: 600px;
+  border: 1px solid #506d6c96;
+  border-radius: 10px;
+  background-color: #39fff51c;
+}
+
 #login .container #login-row #login-column #login-box #login-form {
   padding: 20px;
 }
+
 #login .container #login-row #login-column #login-box #login-form #register-link {
   margin-top: -85px;
 }
@@ -32,5 +53,9 @@ body {
 }
 
 .border_navbar{
-  border-bottom: 2px solid #d2d6e4;
+  border-bottom: 1px solid #d2d6e4;
+}
+
+.grayscale { 
+  filter: invert(50%);
 }
