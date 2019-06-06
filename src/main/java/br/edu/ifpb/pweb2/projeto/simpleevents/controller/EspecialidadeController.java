@@ -42,28 +42,28 @@ public class EspecialidadeController {
     dao.save(especialidade);
     return "redirect:/especialidades/list";
   }
-  
+
   @DeleteMapping("/{id}")
   public String delete(@PathVariable Long id) {
-	  dao.deleteById(id);
-	  return "redirect:/especialidades/list";
-	  //Exibir mensagem de sucesso
+    dao.deleteById(id);
+    return "redirect:/especialidades/list";
+    // Exibir mensagem de sucesso
   }
-  
+
   @PutMapping("/{id}")
   public String update(Authentication auth, Especialidade especialidade, @PathVariable("id") Long id) {
-	 Especialidade specialist = dao.findById(id).get();
-	 specialist.setNome(especialidade.getNome());
-	 specialist.setDescricao(especialidade.getDescricao());
-	 dao.save(especialidade);
-	 return "redirect:/especialidades/list";
+    Especialidade specialist = dao.findById(id).get();
+    specialist.setNome(especialidade.getNome());
+    specialist.setDescricao(especialidade.getDescricao());
+    dao.save(especialidade);
+    return "redirect:/especialidades/list";
   }
-  
-  @GetMapping("/especialidades/{id}")
+
+  @GetMapping("/{id}")
   public ModelAndView getMyEspecialidade(@PathVariable("id") Long id) {
-	  ModelAndView mav = new ModelAndView("especialidades/mySpecialty");
-	  Optional<Especialidade> especialidade = dao.findById(id);
-	  mav.addObject("especialidade", especialidade.get());
-	  return mav;
+    ModelAndView mav = new ModelAndView("especialidades/mySpecialty");
+    Optional<Especialidade> especialidade = dao.findById(id);
+    mav.addObject("especialidade", especialidade.get());
+    return mav;
   }
 }

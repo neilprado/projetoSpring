@@ -45,7 +45,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests().antMatchers("/signup", "/login", "/events").access("isAnonymous()")
                 .and().authorizeRequests().antMatchers("/logout", "/especialidades/**", "/my-events", "/events/**").access("isAuthenticated()")
                 .and().formLogin().loginPage("/login").successHandler(successHandler())
-                .and().logout();
+                .and().logout().deleteCookies("remember-me").and()
+                .rememberMe().tokenValiditySeconds(1800);
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
