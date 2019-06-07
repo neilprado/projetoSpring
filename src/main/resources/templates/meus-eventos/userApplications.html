@@ -71,10 +71,9 @@
 
     $(".btn-candidate").on('click', function (event) {
         event.preventDefault();
-        var action = $(this).parent().attr('action');
+        let action = $(this).parent().attr('action');
         $('#modal-form').attr('action', action);
         $('#modalCandidate').modal('show');
-        console.log(action)
     });
 
 </script>
