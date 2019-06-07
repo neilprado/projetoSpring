@@ -58,7 +58,7 @@ public class EventoController {
 
     @PostMapping
     public String save(Evento evento, Authentication auth, @RequestParam("especialidades") List<Long> especialidades,
-                       @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
+            @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
         Optional<Especialidade> esp;
         int i = 0;
         for (Long id : especialidades) {
@@ -74,13 +74,12 @@ public class EventoController {
         Usuario currentUser = userDao.findByEmail(userEmail);
         evento.setDono(currentUser);
         dao.save(evento);
-        return "redirect:events";
+        return "redirect:/events/my-events";
     }
 
     @GetMapping("/{id}")
     public ModelAndView getEvent(@PathVariable("id") Long id, Authentication auth,
-                                 @ModelAttribute("success") String success,
-                                 @ModelAttribute("error") String error) {
+            @ModelAttribute("success") String success, @ModelAttribute("error") String error) {
         ModelAndView mav = new ModelAndView("/eventos/showEvent");
         Optional<Evento> evento = dao.findById(id);
         if (evento.isPresent()) {
@@ -88,7 +87,8 @@ public class EventoController {
             mav.addObject("evento", e);
             if (auth != null && auth.isAuthenticated()) {
                 Usuario currentUser = getLoggedUser(auth);
-                mav.addObject("currentUser", currentUser);;
+                mav.addObject("currentUser", currentUser);
+                ;
                 if (evento.get().getDono().getUser_id().equals(currentUser.getUser_id())) {
                     mav.setViewName("/eventos/showEventOwner");
                     List<Candidato> candidatos = candidatoDAO.findByVaga_Evento(e);
@@ -106,8 +106,8 @@ public class EventoController {
     }
 
     @PostMapping("/{id}/{especialidade}")
-    public String candidate(@PathVariable("id") Long id, @PathVariable String especialidade,
-                            Authentication auth, RedirectAttributes redirectAttributes) {
+    public String candidate(@PathVariable("id") Long id, @PathVariable String especialidade, Authentication auth,
+            RedirectAttributes redirectAttributes) {
         Evento evento = dao.getOne(id);
         Especialidade espec = especialidadeDao.findByNomeIgnoreCase(especialidade);
         Vaga vaga = vagaDao.findByEventoAndEspecialidade(evento, espec);
@@ -145,6 +145,18 @@ public class EventoController {
         return userDao.findByEmail(userEmail);
     }
 
+    @PostMapping("/my-events/finished/{id}")
+    public String finalizarEvento(@PathVariable("id") Long id, Authentication auth) {
+        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+        Usuario currentUser = userDao.findByEmail(userEmail);
+        Evento evento = dao.findById(id).get();
+        if (currentUser.getUser_id() == evento.getDono().getUser_id()) {
+            evento.setFinalizado(true);
+            dao.save(evento);
+        }
+        return "redirect:/events/my-events";
+    }
+
     @DeleteMapping("/{id}")
     public String delete(Authentication auth, @PathVariable("id") Long id) {
         String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
@@ -158,8 +170,8 @@ public class EventoController {
 
     @PutMapping("/{id}")
     public String update(Authentication auth, Evento evento, @PathVariable("id") Long id,
-                         @RequestParam("especialidades") List<Long> especialidades,
-                         @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
+            @RequestParam("especialidades") List<Long> especialidades,
+            @RequestParam("quantidadevagas") List<Integer> quantidadevagas) {
 
         Evento event = dao.findById(id).get();
         event.setNome(evento.getNome());
@@ -193,7 +205,7 @@ public class EventoController {
         for (Especialidade esp : all) {
             if (!especialidades.contains(esp.getId())) {
                 check.add(esp);
-            } 
+            }
         }
         for (Especialidade esp : check) {
             for (Vaga vaga : event.getVagas()) {

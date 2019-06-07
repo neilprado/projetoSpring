@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Events</title>
+  <title>Meus Eventos</title>
   <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}" />
   <link rel="stylesheet" th:href="@{/css/index.css}" />
 </head>
@@ -18,31 +18,48 @@
     </div>
     <div class="row">
       <div th:each="evento : ${eventos}" class="card m-3" style="width: 18rem;">
-        <div class="card-body">
-          <a th:href="@{'/events/' + ${evento.id}}" class="card-link text-info">
-            <h4 class="card-title" th:text="${evento.nome}"></h4>
-          </a>
-          <h5 class="card-text" th:text="${evento.dono.nome}"></h5>
-          <h6 class="card-text" th:text="${evento.local}"></h6>
-          <h6 class="card-text" th:text="${#temporals.format(evento.data, 'dd-MM-yyyy hh:mm a')}"></h6>
+        <div class="card-body pb-1">
+          <div class="row align-items-center justify-content-between">
+            <a th:href="@{'/events/' + ${evento.id}}" class="card-link text-info">
+              <h4 class="card-title my-0" th:text="${evento.nome}"></h4>
+            </a>
+            <span th:if="${evento.finalizado} == true" class="badge badge-success badge-pill">Finalizado</span>
           </div>
-          <ul class="list-group list-group-flush">
-            <li th:each="vaga: ${evento.vagas}" class="list-group-item d-flex justify-content-between align-items-center">
-              <p style="line-height: 100%; vertical-align: middle; margin-bottom: 0;" th:text="${vaga.especialidade.nome}"
-              ></p>
-              <span class="badge badge-info badge-pill" th:text="${vaga.quantidade}"></span>
-            </li>
-          </ul>
-          <div class="card-body">
-            <div class="row align-items-center justify-content-end">
-                <a th:href="@{'my-events/' + ${evento.id}}" class="btn btn-outline-info">Editar</a>
-                <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
-                  <button type="submit" style="margin-left: 10px; margin-right: 10px;" class="btn btn-danger">Deletar</button>
-                </form>
+          <div class="row"></div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <h5 class="card-text" th:text="${evento.dono.nome}"></h5>
+          </div>
+          <div class="row">
+            <h6 class="card-text" th:text="${evento.local}"></h6>
+          </div>
+          <div class="row">
+            <h6 class="card-text" th:text="${#temporals.format(evento.data, 'dd-MM-yyyy hh:mm a')}"></h6>
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li th:each="vaga: ${evento.vagas}" class="list-group-item d-flex justify-content-between align-items-center">
+            <p style="line-height: 100%; vertical-align: middle; margin-bottom: 0;" th:text="${vaga.especialidade.nome}"
+            ></p>
+            <span class="badge badge-info badge-pill" th:text="${vaga.quantidade}"></span>
+          </li>
+        </ul>
+        <div class="card-body">
+          <div class="row align-items-center justify-content-between px-1">
+            <div class="col px-0">
+              <form th:action="@{'my-events/finished/' + ${evento.id}}" th:method="post">
+                <button class="btn btn-link px-0 btn-finalizar">Finalizar</button>
+              </form>
             </div>
+            <a th:href="@{'my-events/' + ${evento.id}}" class="btn btn-outline-info">Editar</a>
+            <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
+              <button type="submit" style="margin-left: 10px;" class="btn btn-danger">Deletar</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
 </html>
