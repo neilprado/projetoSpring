@@ -40,4 +40,12 @@ public class Vaga {
 	@OneToOne
 	private Especialidade especialidade;
 
+	public void aumentarQuantidade() {
+		this.quantidade++;
+	}
+
+	public void diminuirQuantidade() {
+		this.quantidade--;
+	}
+
 }
