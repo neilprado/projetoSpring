@@ -86,20 +86,16 @@ public class AuthController {
         return "redirect:index";
     }
 
-    @PutMapping("/usuario/{id}")
-    public String update(Authentication auth, Usuario usuario, @PathVariable("id") Long id, @ModelAttribute(value="password2") String pass2) {
-  	  	Usuario user = userRepository.findById(id).get();
-  	  	user.setNome(usuario.getNome());
+    @PutMapping("/atualizar")
+    public String update(Authentication auth, Usuario usuario) {
+    	String email = ((CustomUserDetails)auth.getPrincipal()).getEmail();
+    	Usuario user = userRepository.findByEmail(email);
+    	user.setNome(usuario.getNome());
   	  	user.setDataNascimento(usuario.getDataNascimento());
   	  	user.setTelefone(usuario.getTelefone());
   	  	user.setEmail(usuario.getEmail());
-  	  
-  	  	String pwd = usuario.getPassword();
-  	  	String encryptPwd = passwordEncoder.encode(pwd);
-  	  	usuario.setPassword(encryptPwd);
-  	  
-  	  	userRepository.save(usuario);
-  	  	return "redirect:index";
+  	  	userRepository.save(user);
+  	  	return "redirect:/home";
     }
     
     @GetMapping("/atualizar")

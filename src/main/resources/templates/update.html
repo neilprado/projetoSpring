@@ -17,7 +17,7 @@
           <div id="login-row" class="row justify-content-center align-items-center">
               <div id="login-column" class="col-md-6">
                   <div id="login-box" class="col-md-12">
-                      <form id="login-form" class="form" th:action="@{'/usuario/' + ${usuario.user_id}}" th:object="${usuario}"  th:method="put">
+                      <form id="login-form" class="form" action="/atualizar" th:object="${usuario}"  th:method="put">
                       	<h3 class="text-center text-info">Atualizar</h3>
                       	<div class="form-group row">
                       		<label for="nome" class="text-info">Name:</label><br>
@@ -37,14 +37,6 @@
                       		<i th:if="${erro_email}" class="fas fa-exclamation-circle input_error_icon" data-toggle="tooltip"
                       			data-placement="bottom" title="Email já está em uso"></i>
                       	</div>
-                      	<div class="form-group row">
-                              <label for="password" class="text-info">Password:</label><br>
-                              <input type="password" name="password" id="password" th:field="*{password}" class="form-control" required>
-                          </div>
-                          <div class="form-group row">
-                              <label for="password2" class="text-info">Confirm Password:</label><br>
-                              <input type="password" name="password2" id="password2" class="form-control" required>
-                          </div>
                           <div class="form-group row justify-content-between align-items-center">
                               <input type="submit" name="submit" class="btn btn-info btn-md" value="Atualizar">
                           </div>
