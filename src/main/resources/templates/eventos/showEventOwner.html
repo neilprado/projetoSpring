@@ -7,6 +7,9 @@
     <div class="row justify-content-center">
         <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
     </div>
+    <div class="row justify-content-left ml-3 mb-3">
+        <span th:if="${evento.finalizado} == true" class="badge badge-success badge-pill">Finalizado</span>
+    </div>
     <div class="row justify-content-left ml-3">
         <p><strong>Dono:</strong> <span th:text="${evento.dono.nome}"></span></p>
     </div>
@@ -15,6 +18,9 @@
     </div>
     <div class="row justify-content-left ml-3">
         <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p>
+    </div>
+    <div class="row justify-content-left ml-3">
+        <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
     </div>
     <div class="justify-content-center" style="width: 100%;">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -101,17 +107,19 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id="modal-candidate-body">
+            <div class="modal-body d-flex flex-column justify-content-center align-items-center" id="modal-candidate-body">
                 
             </div>
-            <div class="modal-footer">
-                <p>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
-                    desse mesmo usuário para este evento.</p>
-                <form method="POST" id="modal-form">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" name="submit" value="value" class="btn btn-success">Confirmar
-                    </button>
-                </form>
+            <div class="modal-footer container">
+                <div class="row">
+                </div>
+                <div class="row">
+                    <form method="POST" id="modal-form">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2">Confirmar
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -131,9 +139,13 @@
     $(".btn-candidate").on('click', function (event) {
         event.preventDefault();
         if ($(this).text().trim() === "Aceitar") 
-            $('#modal-candidate-body').html("Você deseja <strong>confirmar</strong> esse candidato na equipe ?")
+            $('#modal-candidate-body').html(`<p class="my-0">Você deseja <span class="text-modal text-confirm">confirmar</span> esse candidato na equipe ?<p>
+            <p class='modal-info'>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
+            desse mesmo usuário para este evento.</p>`)
         else
-            $('#modal-candidate-body').html("Você deseja <strong>negar</strong> a solicitação deste candidato na equipe ?")
+            $('#modal-candidate-body').html(`<p class="my-0">Você deseja <span class="text-modal text-cancel">negar</span> esse candidato na equipe ?<p>
+            <p class='modal-info'>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
+            desse mesmo usuário para este evento.</p>`)
         let action = $(this).parent().attr('action');
         $('#modal-form').attr('action', action);
         $('#modalCandidate').modal('show');

@@ -3,9 +3,12 @@
 <head th:replace="~{head :: head}"></head>
 <body>
 <div th:insert="~{fragments :: navbar}"></div>
-<div class="container d-flex flex-column bg-white mt-3">
+<div class="container d-flex flex-column mt-3">
     <div class="row justify-content-center">
         <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
+    </div>
+    <div class="row justify-content-left ml-3 mb-3">
+        <span th:if="${evento.finalizado} == true" class="badge badge-success badge-pill">Finalizado</span>
     </div>
     <div class="row justify-content-left ml-3">
         <p><strong>Dono:</strong> <span th:text="${evento.dono.nome}"></span></p>
@@ -15,6 +18,9 @@
     </div>
     <div class="row justify-content-left ml-3">
         <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p>
+    </div>
+    <div class="row justify-content-left ml-3">
+        <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
     </div>
     <div class="justify-content-center" style="width: 100%;">
         <table class="table table-bordered table-hover">
@@ -27,15 +33,19 @@
                 <td class="align-middle" th:text="${vaga.especialidade.nome}"></td>
                 <td class="align-middle" th:text="${vaga.quantidade}"></td>
                 <td align="center">
-                    <form method="POST"
+                    <p sec:authorize="isAnonymous()" class="p-0 m-0">Faça o <a href="/login" class="text-info">login</a> para candidatar-se a essa vaga.</p>
+                    <form sec:authorize="isAuthenticated()" method="POST"
                           th:action="@{ ${evento.id} + '/' + ${vaga.especialidade.nome}}">
-                        <button type="button" class="btn btn-outline-secondary btn-candidate">
+                        <button type="button" class="btn btn-outline-info btn-candidate">
                             Candidatar-se
                         </button>
                     </form>
                 </td>
             </tr>
         </table>
+        <div th:if="${avaliar}" class="row justify-content-center">
+            <a th:href="@{'avaliar/' + ${evento.id}}" class="btn btn-info">Avaliar Evento</a>
+        </div>
     </div>
 
 

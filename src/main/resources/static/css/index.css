@@ -59,3 +59,22 @@ body {
 .grayscale { 
   filter: invert(50%);
 }
+
+.modal-info {
+  font-size: 12px;
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+}
+
+.text-modal {
+  font-weight: bold;
+}
+
+.text-confirm {
+  color: #28A745;
+}
+
+.text-cancel {
+  color: #DC3545;
+}

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,6 +30,8 @@ public class EventoController {
     private VagaDAO vagaDao;
     @Autowired
     private CandidatoDAO candidatoDAO;
+    @Autowired
+    private AvaliacaoDAO avaliacaoDAO;
 
     @RequestMapping()
     public ModelAndView listAll(String inputSearch) {
@@ -85,6 +88,7 @@ public class EventoController {
         if (evento.isPresent()) {
             Evento e = evento.get();
             mav.addObject("evento", e);
+            List<Candidato> selecionados = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.APROVADO);
             if (auth != null && auth.isAuthenticated()) {
                 Usuario currentUser = getLoggedUser(auth);
                 mav.addObject("currentUser", currentUser);
@@ -92,8 +96,12 @@ public class EventoController {
                     mav.setViewName("/eventos/showEventOwner");
                     List<Candidato> candidatos = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.NAO_AVALIADO);
                     mav.addObject("candidatos", candidatos);
-                    List<Candidato> selecionados = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.APROVADO);
                     mav.addObject("selecionados", selecionados);
+                }
+                for (Candidato selecionado : selecionados) {
+                    if (selecionado.getUsuario().getUser_id() == currentUser.getUser_id()) {
+                        mav.addObject("avaliar", true);
+                    }
                 }
             }
             if (!success.equals("")) {
@@ -101,6 +109,14 @@ public class EventoController {
             }
             if (!error.equals("")) {
                 mav.addObject("error", true);
+            }
+            if (e.isFinalizado()) {
+                Float result = 0f;
+                for (Avaliacao a : e.getAvaliacao()) {
+                    result += a.getNotaEvento();
+                }
+                result = result / e.getAvaliacao().size();
+                mav.addObject("notaEvento", result);
             }
         }
         return mav;
@@ -197,6 +213,41 @@ public class EventoController {
                 candidatoDAO.save(candidato);
             }
         }
+        return mav;
+    }
+
+    @GetMapping("/avaliar/{id}")
+    public ModelAndView avaliarEventoForm(@PathVariable("id") Long id, Authentication auth) {
+        Evento evento = dao.findById(id).get();
+        List<Candidato> selecionados = candidatoDAO.findByVaga_EventoAndAprovacao(evento, Status.APROVADO);
+        ModelAndView mav = new ModelAndView("eventos/avaliar");
+        Usuario currentUser = getLoggedUser(auth);
+        Avaliacao avaliacao = new Avaliacao();
+        mav.addObject("avaliacao", avaliacao);
+        mav.addObject("idEvento", id);
+        for (Candidato selecionado : selecionados) {
+            if (selecionado.getUsuario().getUser_id() == currentUser.getUser_id()) {
+                return mav;
+            }
+        }
+        mav.setViewName("redirect:/events");
+        return mav;
+    }
+
+    @PostMapping("/avaliar/{id}")
+    public ModelAndView avaliarEvento(@PathVariable("id") Long id, Avaliacao avaliacao, Authentication auth, RedirectAttributes attr) {
+        ModelAndView mav = new ModelAndView("redirect:/events");
+
+        if (avaliacao.getNotaEvento() < 1 || avaliacao.getNotaEvento() > 10) {
+            mav.setViewName("redirect:/events/avaliar/" + id);
+            attr.addFlashAttribute("error", "A nota do evento deve ser entre 1 e 10.");
+        }
+        
+        Evento evento = dao.findById(id).get();
+        Usuario usuario = getLoggedUser(auth);
+        avaliacao.setUsuario(usuario);
+        avaliacao.setEvento(evento);
+        avaliacaoDAO.save(avaliacao);
         return mav;
     }
 
