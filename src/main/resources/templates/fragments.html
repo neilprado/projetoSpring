@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< HEAD
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
@@ -35,6 +36,8 @@
              href="/events/applications">Minhas Solicitações</a>
           <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links custom-navbar-link"
             href="/events/my-events">Meus Eventos</a>
+          <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links custom-navbar-link"
+          	href="/atualizar">Atualizar Dados</a>
           <a sec:authorize="isAuthenticated()" class="nav-item nav-link navbar-links custom-navbar-link" href="/logout"
             th:text="${#authentication?.getName()}"></a>
           </div>
