@@ -4,11 +4,16 @@ import br.edu.ifpb.pweb2.projeto.simpleevents.dao.RoleDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.dao.UsuarioDAO;
 import br.edu.ifpb.pweb2.projeto.simpleevents.model.Role;
 import br.edu.ifpb.pweb2.projeto.simpleevents.model.Usuario;
+import br.edu.ifpb.pweb2.projeto.simpleevents.service.CustomUserDetails;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,17 +86,24 @@ public class AuthController {
         return "redirect:index";
     }
 
-    @PutMapping("/{id}")
-    public String update(@RequestBody Usuario usuario, @PathVariable Long id) {
-        Optional<Usuario> user = userRepository.findById(id);
-        if (!user.isPresent()) {
-            return "redirect:index";
-            //Inserir mensagem de erro
-        }
-        usuario.setUser_id(id);
-        userRepository.save(usuario);
-        return "redirect:index";
-        //Mensagem de sucesso
+    @PutMapping("/atualizar")
+    public String update(Authentication auth, Usuario usuario) {
+    	String email = ((CustomUserDetails)auth.getPrincipal()).getEmail();
+    	Usuario user = userRepository.findByEmail(email);
+    	user.setNome(usuario.getNome());
+  	  	user.setDataNascimento(usuario.getDataNascimento());
+  	  	user.setTelefone(usuario.getTelefone());
+  	  	user.setEmail(usuario.getEmail());
+  	  	userRepository.save(user);
+  	  	return "redirect:/home";
     }
-
+    
+    @GetMapping("/atualizar")
+    public ModelAndView getMyUser(Usuario usuario, Authentication auth) {
+    	String email = ((CustomUserDetails) auth.getPrincipal()).getEmail();
+    	ModelAndView mav = new ModelAndView("update");
+  	  	usuario = userRepository.findByEmail(email);
+  	  	mav.addObject("usuario", usuario);
+  	  	return mav;
+    }
 }
