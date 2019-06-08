@@ -88,7 +88,6 @@ public class EventoController {
             if (auth != null && auth.isAuthenticated()) {
                 Usuario currentUser = getLoggedUser(auth);
                 mav.addObject("currentUser", currentUser);
-                ;
                 if (evento.get().getDono().getUser_id().equals(currentUser.getUser_id())) {
                     mav.setViewName("/eventos/showEventOwner");
                     List<Candidato> candidatos = candidatoDAO.findByVaga_EventoAndAprovacao(e, Status.NAO_AVALIADO);
@@ -260,7 +259,6 @@ public class EventoController {
                     create = false;
                 }
             }
-
             if (create) {
                 Especialidade esp = especialidadeDao.findById(idEspecialidade).get();
                 Vaga novaVaga = new Vaga();
