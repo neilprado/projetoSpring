@@ -47,7 +47,7 @@
                 </div>
                 <a th:if="${evento.finalizado == false}" th:href="@{'my-events/' + ${evento.id}}" class="btn btn-outline-info">Editar</a>
                 <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
-                  <button type="submit" style="margin-left: 10px;" class="btn btn-danger">Deletar</button>
+                  <button type="button" style="margin-left: 10px;" class="btn btn-danger">Deletar</button>
                 </form>
               </div>
             </div>
@@ -55,5 +55,38 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="modalConfirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Finalizar Evento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center" id="modal-confirm-body"></div>
+                <div class="modal-footer container">
+                    <div class="row">
+                        <form method="POST" id="modalConfimForm">
+                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2">Confirmar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+  $(".btn-finalizar").on('click', function (event) {
+      event.preventDefault();
+      $('#modal-confirm-body').html(`<p class="my-0">Você deseja <span class="text-modal text-confirm">finalizar</span> esse evento ?<p>`)
+      let action = $(this).parent().attr('action');
+      $('#modalConfimForm').attr('action', action);
+      $('#modalConfirm').modal('show');
+  });
+</script>    
 </body>
+
+
+
 </html>

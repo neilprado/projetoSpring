@@ -1,9 +1,10 @@
 $(document).ready(function () {
 
-    if($('#rated') != undefined){
+    if($('#rated').length){
         const nota = $('#rated').text();
         defaultStart(nota);
     }
+
     $('#stars li')
         .on('mouseover', function () {
             const onStar = parseInt($(this).data('value'), 10); 
@@ -64,7 +65,6 @@ function defaultStart(ratingValue){
     for (i = 0; i < ratingValue; i++) {
         $(stars[i]).addClass('selected');
     }
-
     responseMessage(ratingValue);
 }
 
@@ -78,4 +78,5 @@ function responseMessage(ratingValue) {
             ' estrela.';
     }
     $('.success-box div.text-message').html('<span>' + msg + '</span>');
+    $(".success-box").removeClass('hidden');
 }

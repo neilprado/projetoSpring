@@ -28,5 +28,5 @@ public class Role {
 	private String role;
 	
 	@ManyToMany(mappedBy="roles", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	private List <Usuario> usuarios = new ArrayList<>();
+	private List <Usuario> usuarios;
 }

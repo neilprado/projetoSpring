@@ -1,5 +1,9 @@
 package br.edu.ifpb.pweb2.projeto.simpleevents.config;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -41,14 +45,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers("/", "/js/**", "/css/**", "/images/**", "/resources/**", "/events", "/events/{id}").permitAll().and()
-                .authorizeRequests().antMatchers("/signup", "/login").access("isAnonymous()").and().authorizeRequests()
-                .antMatchers("/logout", "/especialidades/**", "/my-events", "/events/**").access("isAuthenticated()")
+        http.authorizeRequests().antMatchers(permitedList()).permitAll().and()
+                .authorizeRequests().antMatchers(anonymousList()).access("isAnonymous()").and()
+                .authorizeRequests().antMatchers(authenticatedList()).access("isAuthenticated()")
                 .and().formLogin().loginPage("/login").successHandler(successHandler()).and().logout()
                 .deleteCookies("remember-me").and().rememberMe().tokenValiditySeconds(1800);
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+    }
+
+    private String[] permitedList(){
+        return new String[]{
+            "/", 
+            "/js/**", 
+            "/css/**", 
+            "/images/**", 
+            "/resources/**", 
+            "/events/{id}",
+            "/events"
+        };
+    }
+
+    private String[] anonymousList(){
+        return new String[]{
+            "/signup",
+             "/login"
+        };
+    }
+
+    private String[] authenticatedList(){
+        return new String[]{
+            "/logout", 
+            "/especialidades/**", 
+            "/my-events", 
+            "/events/**"
+        };
     }
 
     @Bean

@@ -17,7 +17,8 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link navbar-links custom-navbar-link" href="/events">Eventos</a>
-          <a class="nav-item nav-link navbar-links custom-navbar-link" href="/especialidades/list">Especialidades</a>
+          <a sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item nav-link navbar-links custom-navbar-link" 
+          href="/especialidades/list">Especialidades</a>
           <a sec:authorize="isAnonymous()" class="nav-item nav-link navbar-links custom-navbar-link"
             href="/signup">Registre-se</a>
           <a sec:authorize="isAnonymous()" class="nav-item nav-link navbar-links custom-navbar-link"
