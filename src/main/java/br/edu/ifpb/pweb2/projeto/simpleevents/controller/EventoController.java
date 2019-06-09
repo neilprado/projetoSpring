@@ -41,8 +41,14 @@ public class EventoController {
             eventos = dao.findByNomeContainingIgnoreCase(inputSearch);
             if (eventos.size() == 0) {
                 Especialidade esp = especialidadeDao.findByNomeIgnoreCase(inputSearch);
-                Vaga vaga = vagaDao.findByEspecialidade(esp);
-                eventos = dao.findAllByVagas(vaga);
+                List<Vaga> vagas = vagaDao.findByEspecialidade(esp);
+                List<Evento> eventosVagas;
+                for (Vaga vaga : vagas) {
+                    eventosVagas = dao.findAllByVagas(vaga);
+                    for (Evento e : eventosVagas) {
+                        eventos.add(e);
+                    }
+                }
             }
         } else {
             eventos = dao.findAll();
