@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -251,6 +250,34 @@ public class EventoController {
         return mav;
     }
 
+    @GetMapping("/candidate/{id}")
+    public ModelAndView candidateRating(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("eventos/candidateRating");
+        Optional<Candidato> checkCandidate = candidatoDAO.findById(id);
+        if (checkCandidate.isPresent()){
+            Candidato candidato = checkCandidate.get();
+            mav.addObject("candidato", candidato);
+            if (candidato.getNota() != 0){
+                mav.addObject("rated", "rated");
+            }
+        }
+        return mav;
+    }
+
+    @PostMapping("/candidato/avaliar/{id}")
+    public ModelAndView avaliarCandidato(@PathVariable("id") Long id, @RequestParam("nota") int nota) {        
+        ModelAndView mav = new ModelAndView("redirect:/home");
+        
+        Optional<Candidato> checkCandidate = candidatoDAO.findById(id);
+        if (checkCandidate.isPresent()){
+            Candidato candidato = checkCandidate.get();
+            mav.setViewName("redirect:/events/" + candidato.getVaga().getEvento().getId() + "#selecionados");
+            candidato.setNota(nota);
+            candidatoDAO.save(candidato);
+        }
+        return mav;        
+    }
+
     // MY EVENTS
 
     @GetMapping("/my-events")
@@ -269,20 +296,17 @@ public class EventoController {
 
     @PostMapping("/my-events/finished/{id}")
     public String finalizarEvento(@PathVariable("id") Long id, Authentication auth) {
-        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
-        Usuario currentUser = userDao.findByEmail(userEmail);
+        Usuario currentUser = getLoggedUser(auth);
         Evento evento = dao.findById(id).get();
         if (currentUser.getUser_id() == evento.getDono().getUser_id()) {
-            evento.setFinalizado(true);
-            dao.save(evento);
+            dao.updateEvento(evento.getId(), true);
         }
         return "redirect:/events/my-events";
     }
 
     @DeleteMapping("/{id}")
     public String delete(Authentication auth, @PathVariable("id") Long id) {
-        String userEmail = ((CustomUserDetails) auth.getPrincipal()).getEmail();
-        Usuario currentUser = userDao.findByEmail(userEmail);
+        Usuario currentUser = getLoggedUser(auth);
         Evento evento = dao.findById(id).get();
         if (evento.getDono() == currentUser)
             dao.deleteById(id);

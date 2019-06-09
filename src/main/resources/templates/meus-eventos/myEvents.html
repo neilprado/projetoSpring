@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Meus Eventos</title>
-  <link rel="stylesheet" th:href="@{https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css}" />
-  <link rel="stylesheet" th:href="@{/css/index.css}" />
-</head>
-
+<head th:replace="~{head :: head}"></head>
 <body>
   <div th:insert="~{fragments :: navbar}"></div>
   <div class="container-fluid main-container my-3">
@@ -48,11 +39,11 @@
         <div class="card-body">
           <div class="row align-items-center justify-content-between px-1">
             <div class="col px-0">
-              <form th:action="@{'my-events/finished/' + ${evento.id}}" th:method="post">
+              <form th:if="${evento.finalizado == false}" th:action="@{'my-events/finished/' + ${evento.id}}" th:method="post">
                 <button class="btn btn-link px-0 btn-finalizar">Finalizar</button>
               </form>
             </div>
-            <a th:href="@{'my-events/' + ${evento.id}}" class="btn btn-outline-info">Editar</a>
+            <a th:if="${evento.finalizado == false}" th:href="@{'my-events/' + ${evento.id}}" class="btn btn-outline-info">Editar</a>
             <form th:action="@{/events/{id}(id=${evento.id})}" th:method="delete">
               <button type="submit" style="margin-left: 10px;" class="btn btn-danger">Deletar</button>
             </form>

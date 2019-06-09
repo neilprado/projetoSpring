@@ -22,7 +22,7 @@
                         Aprovado
                         <form method="POST" class="d-inline-block"
                               th:action="@{ 'applications/cancel/' + ${aplicacao.id}}">
-                            <i class="far fa-trash-alt btn-candidate"></i>
+                            <i class="fa fa-trash-alt btn-candidate"></i>
                         </form>
                     </span>
                     <span th:case="'NAO_APROVADO'">Não Aprovado</span>
@@ -30,7 +30,7 @@
                         Não Avaliado
                         <form method="POST" class="d-inline-block"
                               th:action="@{ 'applications/cancel/' + ${aplicacao.id}}">
-                            <i class="far fa-trash-alt btn-candidate"></i>
+                            <i class="fa fa-trash-alt btn-candidate"></i>
                         </form>
                     </span>
                     <span th:case="'CANCELADO'">Cancelado</span>
