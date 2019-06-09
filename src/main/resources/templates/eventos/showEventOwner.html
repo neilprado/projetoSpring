@@ -4,92 +4,94 @@
     <head th:replace="~{head :: head}"></head>
 
     <body>
-        <div th:insert="~{fragments :: navbar}"></div>
-        <div class="container d-flex flex-column bg-white mt-5">
-        <div class="row justify-content-center">
-            <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
-        </div>
-        <div class="row justify-content-left ml-3 mb-3">
-            <span th:if="${evento.finalizado} == true" class="badge badge-success badge-pill">Finalizado</span>
-        </div>
-        <div class="row justify-content-left ml-3">
-            <p><strong>Dono:</strong> <span th:text="${evento.dono.nome}"></span></p>
-        </div>
-        <div class="row justify-content-left ml-3">
-            <p><strong>Local:</strong> <span th:text="${evento.local}"></span></p>
-        </div>
-        <div class="row justify-content-left ml-3">
-            <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p></div>
-            <div class="row justify-content-left ml-3">
-                <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
+        <div class="container-no-scroll">
+            <div th:insert="~{fragments :: navbar}"></div>
+            <div class="container d-flex flex-column bg-white mt-5">
+            <div class="row justify-content-center">
+                <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
             </div>
-            <div class="justify-content-center" style="width: 100%;">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="vagas-tab" data-toggle="tab" href="#vagas" role="tab" aria-controls="vagas" aria-selected="true">Vagas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="solicitacao-tab" data-toggle="tab" href="#solicitacao" role="tab" aria-controls="solicitacao" aria-selected="false">Solicitações</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="selecionados-tab" data-toggle="tab" href="#selecionados" role="tab" aria-controls="selecionados" aria-selected="false">Equipe</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="vagas" role="tabpanel" aria-labelledby="vagas-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th>Profissional</th>
-                                <th>Vagas Disponíveis</th>
-                            </tr>
-                            <tr th:each="vaga : ${evento.vagas}">
-                                <td th:text="${vaga.especialidade.nome}"></td>
-                                <td th:text="${vaga.quantidade}"></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="solicitacao" role="tabpanel" aria-labelledby="solicitacao-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th>Candidato</th>
-                                <th colspan="2">Vaga</th>
-                            </tr>
-                            <tr th:each="candidato : ${candidatos}">
-                                <td width="32%" th:text="${candidato.usuario.nome}"></td>
-                                <td width="32%" th:text="${candidato.vaga.especialidade.nome}"></td>
-                                <td class="text-center">
-                                    <form method="POST" th:action="@{'candidate/confirm/' + ${candidato.id}}" class="d-inline-block">
-                                        <button type="button" class="btn btn-success btn-candidate">Aceitar</button>
-                                    </form>
-                                    <form method="POST" th:action="@{'candidate/deny/' + ${candidato.id}}" class="d-inline-block">
-                                        <button type="button" class="btn btn-danger btn-candidate">Negar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="selecionados" role="tabpanel" aria-labelledby="selecionados-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th>Candidato</th>
-                                <th colspan="2">Vaga</th>
-                            </tr>
-                            <tr th:each="candidato : ${selecionados}">
-                                <td width="40%" th:text="${candidato.usuario.nome}"></td>
-                                <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
-                                <td class="align-middle text-center" th:switch="${candidato.vaga.evento.finalizado}">
-                                    <span th:case="true">
-                                        <span class="hidden" id="id_candidate" th:text="${candidato.id}"></span>
-                                        <button th:if="${candidato.nota == 0}" type="button" class="btn btn-info btn-rating">Avaliar</button>
-                                        <span th:if="${candidato.nota != 0}" class="badge badge-info badge-pill btn-rating">Avaliado</span>
-                                        
-                                    </span>
-                                    <span th:case="false">
-                                        <button type="button" class="btn btn-danger">Excluir</button>
-                                    </span>
-                                </td>
-                            </tr>
-                        </table>
+            <div class="row justify-content-left ml-3 mb-3">
+                <span th:if="${evento.finalizado} == true" class="badge badge-success badge-pill">Finalizado</span>
+            </div>
+            <div class="row justify-content-left ml-3">
+                <p><strong>Dono:</strong> <span th:text="${evento.dono.nome}"></span></p>
+            </div>
+            <div class="row justify-content-left ml-3">
+                <p><strong>Local:</strong> <span th:text="${evento.local}"></span></p>
+            </div>
+            <div class="row justify-content-left ml-3">
+                <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p></div>
+                <div class="row justify-content-left ml-3">
+                    <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
+                </div>
+                <div class="justify-content-center" style="width: 100%;">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="vagas-tab" data-toggle="tab" href="#vagas" role="tab" aria-controls="vagas" aria-selected="true">Vagas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="solicitacao-tab" data-toggle="tab" href="#solicitacao" role="tab" aria-controls="solicitacao" aria-selected="false">Solicitações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="selecionados-tab" data-toggle="tab" href="#selecionados" role="tab" aria-controls="selecionados" aria-selected="false">Equipe</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="vagas" role="tabpanel" aria-labelledby="vagas-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Profissional</th>
+                                    <th>Vagas Disponíveis</th>
+                                </tr>
+                                <tr th:each="vaga : ${evento.vagas}">
+                                    <td th:text="${vaga.especialidade.nome}"></td>
+                                    <td th:text="${vaga.quantidade}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="solicitacao" role="tabpanel" aria-labelledby="solicitacao-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th colspan="2">Vaga</th>
+                                </tr>
+                                <tr th:each="candidato : ${candidatos}">
+                                    <td width="32%" th:text="${candidato.usuario.nome}"></td>
+                                    <td width="32%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                                    <td class="text-center">
+                                        <form method="POST" th:action="@{'candidate/confirm/' + ${candidato.id}}" class="d-inline-block">
+                                            <button type="button" class="btn btn-success btn-candidate">Aceitar</button>
+                                        </form>
+                                        <form method="POST" th:action="@{'candidate/deny/' + ${candidato.id}}" class="d-inline-block">
+                                            <button type="button" class="btn btn-danger btn-candidate">Negar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="selecionados" role="tabpanel" aria-labelledby="selecionados-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th colspan="2">Vaga</th>
+                                </tr>
+                                <tr th:each="candidato : ${selecionados}">
+                                    <td width="40%" th:text="${candidato.usuario.nome}"></td>
+                                    <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                                    <td class="align-middle text-center" th:switch="${candidato.vaga.evento.finalizado}">
+                                        <span th:case="true">
+                                            <span class="hidden" id="id_candidate" th:text="${candidato.id}"></span>
+                                            <button th:if="${candidato.nota == 0}" type="button" class="btn btn-info btn-rating">Avaliar</button>
+                                            <span th:if="${candidato.nota != 0}" class="badge badge-info badge-pill btn-rating">Avaliado</span>
+                                            
+                                        </span>
+                                        <span th:case="false">
+                                            <button type="button" class="btn btn-danger">Excluir</button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

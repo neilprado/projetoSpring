@@ -40,8 +40,14 @@ public class EventoController {
             eventos = dao.findByNomeContainingIgnoreCase(inputSearch);
             if (eventos.size() == 0) {
                 Especialidade esp = especialidadeDao.findByNomeIgnoreCase(inputSearch);
-                Vaga vaga = vagaDao.findByEspecialidade(esp);
-                eventos = dao.findAllByVagas(vaga);
+                List<Vaga> vagas = vagaDao.findByEspecialidade(esp);
+                List<Evento> eventosVagas;
+                for (Vaga vaga : vagas) {
+                    eventosVagas = dao.findAllByVagas(vaga);
+                    for (Evento e : eventosVagas) {
+                        eventos.add(e);
+                    }
+                }
             }
         } else {
             eventos = dao.findAll();
@@ -98,7 +104,7 @@ public class EventoController {
                     mav.addObject("selecionados", selecionados);
                 }
                 for (Candidato selecionado : selecionados) {
-                    if (selecionado.getUsuario().getUser_id() == currentUser.getUser_id()) {
+                    if (selecionado.getUsuario().getUser_id().equals(currentUser.getUser_id())) {
                         mav.addObject("avaliar", true);
                     }
                 }
@@ -225,7 +231,7 @@ public class EventoController {
         mav.addObject("avaliacao", avaliacao);
         mav.addObject("idEvento", id);
         for (Candidato selecionado : selecionados) {
-            if (selecionado.getUsuario().getUser_id() == currentUser.getUser_id()) {
+            if (selecionado.getUsuario().getUser_id().equals(currentUser.getUser_id())) {
                 return mav;
             }
         }
@@ -298,7 +304,7 @@ public class EventoController {
     public String finalizarEvento(@PathVariable("id") Long id, Authentication auth) {
         Usuario currentUser = getLoggedUser(auth);
         Evento evento = dao.findById(id).get();
-        if (currentUser.getUser_id() == evento.getDono().getUser_id()) {
+        if (currentUser.getUser_id().equals(evento.getDono().getUser_id())) {
             dao.updateEvento(evento.getId(), true);
         }
         return "redirect:/events/my-events";
@@ -329,7 +335,7 @@ public class EventoController {
         for (Long idEspecialidade : especialidades) {
             Boolean create = true;
             for (Vaga vaga : event.getVagas()) {
-                if (vaga.getEspecialidade().getId() == idEspecialidade) {
+                if (vaga.getEspecialidade().getId().equals(idEspecialidade)) {
                     vaga.setQuantidade(quantidadevagas.get(i));
                     create = false;
                 }
@@ -354,7 +360,7 @@ public class EventoController {
         }
         for (Especialidade esp : check) {
             for (Vaga vaga : event.getVagas()) {
-                if (esp.getId() == vaga.getEspecialidade().getId()) {
+                if (esp.getId().equals(vaga.getEspecialidade().getId())) {
                     vaga.setEvento(null);
                 }
             }

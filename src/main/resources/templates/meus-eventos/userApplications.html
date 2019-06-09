@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{head :: head}"></head>
-<body>
-<div th:insert="~{fragments :: navbar}"></div>
-<div class="container d-flex flex-column bg-white mt-3">
-    <div class="justify-content-center" style="width: 100%;">
-        <table class="table table-bordered table-hover">
-            <tr>
-                <th>Vaga</th>
-                <th>Evento</th>
-                <th>Data</th>
-                <th>Status</th>
-            </tr>
-            <tr th:each="aplicacao : ${aplicacoes}">
-                <td class="align-middle" th:text="${aplicacao.vaga.especialidade.nome}"></td>
-                <td class="align-middle" th:text="${aplicacao.vaga.evento.nome}"></td>
-                <td class="align-middle"
-                    th:text="${#temporals.format(aplicacao.vaga.evento.data, 'dd MMM yyyy - HH:mm')}"></td>
+
+	<head th:replace="~{head :: head}"></head>
+
+	<body>
+		<div th:insert="~{fragments :: navbar}"></div>
+		<div class="container-no-scroll">
+			<div class="container d-flex flex-column bg-white mt-3">
+				<div class="justify-content-center" style="width: 100%;">
+					<table class="table table-bordered table-hover">
+						<tr>
+							<th>Vaga</th>
+							<th>Evento</th>
+							<th>Data</th>
+							<th>Status</th>
+						</tr>
+						<tr th:each="aplicacao : ${aplicacoes}">
+							<td class="align-middle" th:text="${aplicacao.vaga.especialidade.nome}"></td>
+							<td class="align-middle" th:text="${aplicacao.vaga.evento.nome}"></td>
+							<td class="align-middle"
+								th:text="${#temporals.format(aplicacao.vaga.evento.data, 'dd MMM yyyy - HH:mm')}"></td>
                 <td class="align-middle" th:switch="${aplicacao.aprovacao.name()}">
                     <span th:case="'APROVADO'">
                         Aprovado
@@ -36,45 +39,44 @@
                     <span th:case="'CANCELADO'">Cancelado</span>
                 </td>
             </tr>
-        </table>
+        	</table>
+    		</div>
+			</div>
+		</div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="modalCandidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Cancelar Candidatura</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+									<span aria-hidden="true">&times;</span>
+							</button>
+					</div>
+					<div class="modal-body">
+							<p>Você deseja <strong>cancelar</strong> sua candidatura na vaga ?</p>
+					</div>
+					<div class="modal-footer">
+							<form method="POST" id="modal-form">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="submit" name="submit" value="value" class="btn btn-success">Confirmar
+									</button>
+							</form>
+					</div>
+				</div>
+			</div>
     </div>
-
-
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="modalCandidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cancelar Candidatura</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Você deseja <strong>cancelar</strong> sua candidatura na vaga ?</p>
-            </div>
-            <div class="modal-footer">
-                <form method="POST" id="modal-form">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" name="submit" value="value" class="btn btn-success">Confirmar
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
+		
 <script>
 
-    $(".btn-candidate").on('click', function (event) {
-        event.preventDefault();
-        let action = $(this).parent().attr('action');
-        $('#modal-form').attr('action', action);
-        $('#modalCandidate').modal('show');
-    });
+	$(".btn-candidate").on('click', function (event) {
+		event.preventDefault();
+		let action = $(this).parent().attr('action');
+		$('#modal-form').attr('action', action);
+		$('#modalCandidate').modal('show');
+	});
 
 </script>
 </body>
