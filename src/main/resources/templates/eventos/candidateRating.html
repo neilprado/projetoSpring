@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="modal-header">
+    <h5 class="modal-title text-center"id="exampleModalRating"> Avaliar Candidato - <span th:text="${candidato.usuario.nome}"></span> </h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"> <span aria-hidden="true">&times;</span> </button>
+</div>
+<div class="modal-body d-flex flex-column justify-content-center align-items-center" id="modal-rating-body">
+    <h3 class="mb-4">Dê sua nota</h3>
+    <section class="rating-widget">
+        <!-- Rating Stars Box -->
+        <div class="rating-stars text-center">
+            <ul id="stars">
+                <li class="star" title="Poor" data-value="1"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" title="Fair" data-value="2"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" title="Good" data-value="3"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" title="Excellent" data-value="4"><i class="fa fa-star fa-fw"></i></li>
+                <li class="star" title="WOW!!!" data-value="5"><i class="fa fa-star fa-fw"></i></li>
+            </ul>
+        </div>
+        <div class="success-box hidden">
+            <div class="clearfix"></div>
+            <img alt="tick image" width="32"
+                src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlb
+                mNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTku
+                MC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+Cjxzdmc
+                geG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmc
+                vMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA0
+                MjYuNjY3IDQyNi42NjciIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDQyNi42NjcgNDI2LjY2NzsiIHhtbDpzc
+                GFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIHN0eWxlPSJmaWxsOiM2QUMyNTk7IiB
+                kPSJNMjEzLjMzMywwQzk1LjUxOCwwLDAsOTUuNTE0LDAsMjEzLjMzM3M5NS41MTgsMjEzLjMzMywyMTMuMzMzLDIxMy4zMzMgIG
+                MxMTcuODI4LDAsMjEzLjMzMy05NS41MTQsMjEzLjMzMy0yMTMuMzMzUzMzMS4xNTcsMCwyMTMuMzMzLDB6IE0xNzQuMTk5LDMyMi45
+                MThsLTkzLjkzNS05My45MzFsMzEuMzA5LTMxLjMwOWw2Mi42MjYsNjIuNjIyICBsMTQwLjg5NC0xNDAuODk4bDMxLjMwOSwzMS4zMD
+                lMMTc0LjE5OSwzMjIuOTE4eiIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8
+                Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
+            <div class="text-message"></div>
+            <div class="clearfix"></div>
+        </div>
+    </section>
+</div>
+<div class="modal-footer container">
+    <div class="row"></div>
+    <div class="row">
+        <form method="POST" id="modal-form" th:action="@{'candidato/avaliar/' + ${candidato.id}}">
+            <input type="hidden" name="nota" value="0" id="rating_value">
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal"> Cancelar </button>
+            <button th:if="${candidato.nota == 0}" type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2"> Confirmar </button>
+            <button th:if="${candidato.nota != 0}" type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2"> Atualizar </button>
+        </form>
+    </div>
+ </div>
+ <span th:if="${rated != null}" class="hidden" th:text="${candidato.nota}" id="rated"></span>
+<script th:src="@{~/js/rating.js}"></script>

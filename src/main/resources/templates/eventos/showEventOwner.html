@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{head :: head}"></head>
-<body>
-    <div class="container-no-scroll">
 
-    
-        <div th:insert="~{fragments :: navbar}"></div>
-        <div class="container d-flex flex-column bg-white mt-5">
+    <head th:replace="~{head :: head}"></head>
+
+    <body>
+        <div class="container-no-scroll">
+            <div th:insert="~{fragments :: navbar}"></div>
+            <div class="container d-flex flex-column bg-white mt-5">
             <div class="row justify-content-center">
                 <h1 th:text="${evento.nome}" style="color: #17a2b8;"></h1>
             </div>
@@ -20,141 +20,113 @@
                 <p><strong>Local:</strong> <span th:text="${evento.local}"></span></p>
             </div>
             <div class="row justify-content-left ml-3">
-                <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p>
-            </div>
-            <div class="row justify-content-left ml-3">
-                <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
-            </div>
-            <div class="justify-content-center" style="width: 100%;">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="vagas-tab" data-toggle="tab" href="#vagas" role="tab" aria-controls="vagas"
-                        aria-selected="true">Vagas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="solicitacao-tab" data-toggle="tab" href="#solicitacao" role="tab"
-                        aria-controls="solicitacao" aria-selected="false">Solicitações</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="selecionados-tab" data-toggle="tab" href="#selecionados" role="tab"
-                        aria-controls="selecionados" aria-selected="false">Equipe</a>
-                    </li>
-
-                </ul>
-                <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="vagas" role="tabpanel" aria-labelledby="vagas-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th>Profissional</th>
-                                <th>Vagas Disponíveis</th>
-                            </tr>
-                            <tr th:each="vaga : ${evento.vagas}">
-                                <td th:text="${vaga.especialidade.nome}"></td>
-                                <td th:text="${vaga.quantidade}"></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="solicitacao" role="tabpanel" aria-labelledby="solicitacao-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th >Candidato</th>
-                                <th colspan="2" >Vaga</th>
-                            </tr>
-                            <tr th:each="candidato : ${candidatos}">
-                                <td width="32%" th:text="${candidato.usuario.nome}"></td>
-                                <td width="32%" th:text="${candidato.vaga.especialidade.nome}"></td>
-                                <td align="center">
-                                <form method="POST" th:action="@{ 'candidate/confirm/' + ${candidato.id}}"
-                                    class="d-inline-block">
-                                    <button type="button" class="btn btn-success btn-candidate">
-                                        Aceitar
-                                    </button>
-                                </form>
-                                <form method="POST" th:action="@{ 'candidate/deny/' + ${candidato.id}}"
-                                    class="d-inline-block">
-                                    <button type="button" class="btn btn-danger btn-candidate">
-                                        Negar
-                                    </button>
-                                </form>
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="tab-pane fade" id="selecionados" role="tabpanel" aria-labelledby="selecionados-tab">
-                        <table class="table table-bordered table-hover">
-                            <tr>
-                                <th >Candidato</th>
-                                <th colspan="2" >Vaga</th>
-                            </tr>
-                            <tr th:each="candidato : ${selecionados}">
-                                <td width="40%" th:text="${candidato.usuario.nome}"></td>
-                                <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
-                                <td align="center">
-                                    <button type="button" class="btn btn-danger">Excluir</button>
-                                </td>
-                            </tr>
-                        </table>
+                <p><strong>Data:</strong> <span th:text="${#temporals.format(evento.data, 'dd MMM yyyy - HH:mm')}"></span></p></div>
+                <div class="row justify-content-left ml-3">
+                    <p><strong>Avaliação:</strong> <span th:text="${notaEvento}"></span></p>
+                </div>
+                <div class="justify-content-center" style="width: 100%;">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="vagas-tab" data-toggle="tab" href="#vagas" role="tab" aria-controls="vagas" aria-selected="true">Vagas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="solicitacao-tab" data-toggle="tab" href="#solicitacao" role="tab" aria-controls="solicitacao" aria-selected="false">Solicitações</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="selecionados-tab" data-toggle="tab" href="#selecionados" role="tab" aria-controls="selecionados" aria-selected="false">Equipe</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="vagas" role="tabpanel" aria-labelledby="vagas-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Profissional</th>
+                                    <th>Vagas Disponíveis</th>
+                                </tr>
+                                <tr th:each="vaga : ${evento.vagas}">
+                                    <td th:text="${vaga.especialidade.nome}"></td>
+                                    <td th:text="${vaga.quantidade}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="solicitacao" role="tabpanel" aria-labelledby="solicitacao-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th colspan="2">Vaga</th>
+                                </tr>
+                                <tr th:each="candidato : ${candidatos}">
+                                    <td width="32%" th:text="${candidato.usuario.nome}"></td>
+                                    <td width="32%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                                    <td class="text-center">
+                                        <form method="POST" th:action="@{'candidate/confirm/' + ${candidato.id}}" class="d-inline-block">
+                                            <button type="button" class="btn btn-success btn-candidate">Aceitar</button>
+                                        </form>
+                                        <form method="POST" th:action="@{'candidate/deny/' + ${candidato.id}}" class="d-inline-block">
+                                            <button type="button" class="btn btn-danger btn-candidate">Negar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="selecionados" role="tabpanel" aria-labelledby="selecionados-tab">
+                            <table class="table table-bordered table-hover">
+                                <tr>
+                                    <th>Candidato</th>
+                                    <th colspan="2">Vaga</th>
+                                </tr>
+                                <tr th:each="candidato : ${selecionados}">
+                                    <td width="40%" th:text="${candidato.usuario.nome}"></td>
+                                    <td width="40%" th:text="${candidato.vaga.especialidade.nome}"></td>
+                                    <td class="align-middle text-center" th:switch="${candidato.vaga.evento.finalizado}">
+                                        <span th:case="true">
+                                            <span class="hidden" id="id_candidate" th:text="${candidato.id}"></span>
+                                            <button th:if="${candidato.nota == 0}" type="button" class="btn btn-info btn-rating">Avaliar</button>
+                                            <span th:if="${candidato.nota != 0}" class="badge badge-info badge-pill btn-rating">Avaliado</span>
+                                            
+                                        </span>
+                                        <span th:case="false">
+                                            <button type="button" class="btn btn-danger">Excluir</button>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="modalCandidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="modalCandidate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Solicitação</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
                     </div>
-                    <div class="modal-body d-flex flex-column justify-content-center align-items-center" id="modal-candidate-body">
-                        
-                    </div>
+                    <div class="modal-body d-flex flex-column justify-content-center align-items-center" id="modal-candidate-body"></div>
                     <div class="modal-footer container">
-                        <div class="row">
-                        </div>
+                        <div class="row"></div>
                         <div class="row">
                             <form method="POST" id="modal-form">
                                 <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2">Confirmar
-                                </button>
+                                <button type="submit" name="submit" value="value" class="btn btn-success ml-1 mr-2">Confirmar</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-<script>
-    // Javascript to enable link to tab
-    let url = document.location.toString();
-    if (url.match('#')) {
-        $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-    }
 
-    // Change hash for page-reload
-    $('.nav-tabs a').on('shown.bs.tab', function (e) {
-        window.location.hash = e.target.hash;
-    })
+        <!-- Modal Rating -->
+        <div class="modal fade" id="modalRating" tabindex="-1" role="dialog" aria-labelledby="exampleModalRating" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" id="modal-rating-body">                    
+                </div>
+            </div>
+        </div>
 
-    $(".btn-candidate").on('click', function (event) {
-        event.preventDefault();
-        if ($(this).text().trim() === "Aceitar") 
-            $('#modal-candidate-body').html(`<p class="my-0">Você deseja <span class="text-modal text-confirm">confirmar</span> esse candidato na equipe ?<p>
-            <p class='modal-info'>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
-            desse mesmo usuário para este evento.</p>`)
-        else
-            $('#modal-candidate-body').html(`<p class="my-0">Você deseja <span class="text-modal text-cancel">negar</span> esse candidato na equipe ?<p>
-            <p class='modal-info'>Aceitar um usuário em uma vaga irá negar automaticamente todas as solicitações para outras vagas
-            desse mesmo usuário para este evento.</p>`)
-        let action = $(this).parent().attr('action');
-        $('#modal-form').attr('action', action);
-        $('#modalCandidate').modal('show');
-    });
-
-</script>
-</body>
+        <script th:src="@{~/js/showEventOwner.js}"></script>
+    </body>
 </html>
