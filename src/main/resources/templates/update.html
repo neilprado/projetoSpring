@@ -2,15 +2,15 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{head :: head}"></head>
 <body>
+	<div class="container-no-scroll">
   <div th:insert="~{fragments :: navbar}"></div>
   <div id="login">
-      <h3 class="text-center text-white pt-5">Atualizar Dados do Usuário</h3>
-      <div class="container">
+      <div class="container mt-5">
           <div id="login-row" class="row justify-content-center align-items-center">
               <div id="login-column" class="col-md-6">
                   <div id="login-box" class="col-md-12">
                       <form id="login-form" class="form" action="/atualizar" th:object="${usuario}"  th:method="put">
-                      	<h3 class="text-center text-info">Atualizar</h3>
+                      	<h3 class="text-center text-info">Atualizar Dados do Usuário</h3>
                       	<div class="form-group row">
                       		<label for="nome" class="text-info">Name:</label><br>
                       		<input type="text" name="nome" id="name" th:field="*{nome}" required class="form-control">
@@ -37,6 +37,7 @@
               </div>
           </div>
       </div>
-  </div>
+	</div>
+</div>
 </body>
 </html>

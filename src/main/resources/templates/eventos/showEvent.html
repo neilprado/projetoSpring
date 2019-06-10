@@ -35,7 +35,8 @@
                         <td class="align-middle" th:text="${vaga.quantidade}"></td>
                         <td align="center">
                             <p sec:authorize="isAnonymous()" class="p-0 m-0">Faça o <a href="/login" class="text-info">login</a> para candidatar-se a essa vaga.</p>
-                            <form sec:authorize="isAuthenticated()" method="POST"
+                            <p class="p-0 m-0">-</p>
+                            <form sec:authorize="isAuthenticated()" th:if="${!vaga.evento.finalizado}" method="POST"
                                 th:action="@{ ${evento.id} + '/' + ${vaga.especialidade.nome}}">
                                 <button type="button" class="btn btn-outline-info btn-candidate">
                                     Candidatar-se

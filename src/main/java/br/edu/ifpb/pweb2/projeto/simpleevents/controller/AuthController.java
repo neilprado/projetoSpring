@@ -32,7 +32,7 @@ public class AuthController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
-    public ModelAndView login(HttpServletRequest request, @CookieValue("last_email") String lastEmail) {
+    public ModelAndView login(HttpServletRequest request, @CookieValue(value="last_email", defaultValue="") String lastEmail) {
         ModelAndView mav = new ModelAndView("login");
         mav.addObject("lastEmail", lastEmail);
         return mav;
