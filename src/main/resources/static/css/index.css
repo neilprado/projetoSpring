@@ -2,6 +2,7 @@ body {
   margin: 0;
   padding: 0;
   color: #6c757d;
+  min-height: 100vh;
   background: rgb(255,255,255);
   background: linear-gradient(180deg, rgba(255,255,255,1) 40%, rgba(199,240,238,1) 100%);
 }

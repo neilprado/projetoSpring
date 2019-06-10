@@ -4,8 +4,8 @@
 	<head th:replace="~{head :: head}"></head>
 
 	<body>
-		<div th:insert="~{fragments :: navbar}"></div>
 		<div class="container-no-scroll">
+		<div th:insert="~{fragments :: navbar}"></div>
 			<div class="container d-flex flex-column bg-white mt-3">
 				<div class="justify-content-center" style="width: 100%;">
 					<table class="table table-bordered table-hover">
@@ -17,9 +17,9 @@
 						</tr>
 						<tr th:each="aplicacao : ${aplicacoes}">
 							<td class="align-middle" th:text="${aplicacao.vaga.especialidade.nome}"></td>
-							<td class="align-middle" th:text="${aplicacao.vaga.evento.nome}"></td>
+							<td class="align-middle" th:text="${aplicacao.vaga.evento?.nome}"></td>
 							<td class="align-middle"
-								th:text="${#temporals.format(aplicacao.vaga.evento.data, 'dd MMM yyyy - HH:mm')}"></td>
+								th:text="${#temporals.format(aplicacao.vaga.evento?.data, 'dd MMM yyyy - HH:mm')}"></td>
                 <td class="align-middle" th:switch="${aplicacao.aprovacao.name()}">
                     <span th:case="'APROVADO'">
                         Aprovado
